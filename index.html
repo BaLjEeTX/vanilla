@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The DSA Codex — Learn Data Structures & Algorithms in Java</title>
 <link rel="stylesheet" href="styles.css" />
+<script>
+  (function(){var t=localStorage.getItem('codex-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
 </head>
 <body>
 
@@ -16,7 +19,25 @@
     <li><a href="algorithms.html">Algorithms</a></li>
     <li><a href="java.html">Java Toolkit</a></li>
   </ul>
+  <div class="nav-right">
+    <button id="search-btn" title="Search (Ctrl+K / ⌘K)">⌕ Search <span class="kbd">⌘K</span></button>
+    <button id="focus-btn" title="Distraction-free reading">⊡</button>
+    <button id="theme-toggle" title="Toggle dark mode">◑</button>
+  </div>
 </nav>
+
+<div class="progress-strip">
+  <div class="progress-bar-track"><div id="progress-bar-fill"></div></div>
+  <span id="progress-label">0 / 8 sections complete</span>
+</div>
+
+<!-- Search overlay -->
+<div id="search-overlay">
+  <div class="search-box">
+    <input id="search-input" type="text" placeholder="Search all chapters…" autocomplete="off" spellcheck="false" />
+    <div id="search-results"><p class="search-hint">Type to search across all chapters…</p></div>
+  </div>
+</div>
 
 <header class="hero">
   <div class="hero-eyebrow">A free, self-paced field guide · No course required</div>
@@ -280,6 +301,14 @@
         <span class="pc-diff easy">Easy</span>
       </a>
     </div>
+  </div>
+
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="data-structures.html#array">Array complexity</a>
+    <a class="cross-chip" href="data-structures.html#hashmap">HashMap O(1) lookup</a>
+    <a class="cross-chip" href="data-structures.html#heap">Heap O(log n)</a>
+    <a class="cross-chip" href="algorithms.html#dp">DP & memoization</a>
   </div>
 
   <div class="ornament">❦</div>

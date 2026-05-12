@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Data Structures — The DSA Codex</title>
 <link rel="stylesheet" href="styles.css" />
+<script>
+  (function(){var t=localStorage.getItem('codex-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
 </head>
 <body>
 
@@ -16,7 +19,25 @@
     <li><a href="algorithms.html">Algorithms</a></li>
     <li><a href="java.html">Java Toolkit</a></li>
   </ul>
+  <div class="nav-right">
+    <button id="search-btn" title="Search (Ctrl+K / ⌘K)">⌕ Search <span class="kbd">⌘K</span></button>
+    <button id="focus-btn" title="Distraction-free reading">⊡</button>
+    <button id="theme-toggle" title="Toggle dark mode">◑</button>
+  </div>
 </nav>
+
+<div class="progress-strip">
+  <div class="progress-bar-track"><div id="progress-bar-fill"></div></div>
+  <span id="progress-label">0 / 14 sections complete</span>
+</div>
+
+<!-- Search overlay -->
+<div id="search-overlay">
+  <div class="search-box">
+    <input id="search-input" type="text" placeholder="Search all chapters…" autocomplete="off" spellcheck="false" />
+    <div id="search-results"><p class="search-hint">Type to search across all chapters…</p></div>
+  </div>
+</div>
 
 <header class="hero">
   <div class="hero-eyebrow">Chapter II · The containers of computation</div>
@@ -359,6 +380,12 @@ stack.push(<span class="tok-num">3</span>);
       <a class="problem-card" href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener"><span class="pc-num">№ 84</span><span class="pc-title">Largest Rectangle in Histogram</span><span class="pc-diff hard">Hard</span></a>
     </div>
   </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="algorithms.html#dfs">DFS uses a stack</a>
+    <a class="cross-chip" href="algorithms.html#monotonic">Monotonic Stack pattern</a>
+    <a class="cross-chip" href="algorithms.html#backtracking">Backtracking call stack</a>
+  </div>
 </section>
 
 <!-- ============ QUEUE / DEQUE ============ -->
@@ -408,6 +435,12 @@ dq.pollLast();         <span class="tok-com">// remove from back</span></code></
       <a class="problem-card" href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener"><span class="pc-num">№ 239</span><span class="pc-title">Sliding Window Maximum</span><span class="pc-diff hard">Hard</span></a>
       <a class="problem-card" href="https://leetcode.com/problems/design-circular-queue/" target="_blank" rel="noopener"><span class="pc-num">№ 622</span><span class="pc-title">Design Circular Queue</span><span class="pc-diff medium">Medium</span></a>
     </div>
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="algorithms.html#bfs">BFS uses a queue</a>
+    <a class="cross-chip" href="algorithms.html#topo">Topological Sort (Kahn's)</a>
+    <a class="cross-chip" href="algorithms.html#sliding-window">Sliding Window pattern</a>
   </div>
 </section>
 
@@ -583,6 +616,12 @@ PriorityQueue&lt;<span class="tok-typ">int</span>[]&gt; pq =
       <a class="problem-card" href="https://leetcode.com/problems/task-scheduler/" target="_blank" rel="noopener"><span class="pc-num">№ 621</span><span class="pc-title">Task Scheduler</span><span class="pc-diff medium">Medium</span></a>
       <a class="problem-card" href="https://leetcode.com/problems/find-median-from-data-stream/" target="_blank" rel="noopener"><span class="pc-num">№ 295</span><span class="pc-title">Find Median from Data Stream</span><span class="pc-diff hard">Hard</span></a>
     </div>
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="algorithms.html#dijkstra">Dijkstra's (needs a heap)</a>
+    <a class="cross-chip" href="algorithms.html#greedy">Greedy with heap</a>
+    <a class="cross-chip" href="index.html#growth">Heap complexity O(log n)</a>
   </div>
 </section>
 
@@ -865,6 +904,13 @@ List&lt;List&lt;Integer&gt;&gt; graph = <span class="tok-kw">new</span> ArrayLis
       <a class="problem-card" href="https://leetcode.com/problems/pacific-atlantic-water-flow/" target="_blank" rel="noopener"><span class="pc-num">№ 417</span><span class="pc-title">Pacific Atlantic Water Flow</span><span class="pc-diff medium">Medium</span></a>
       <a class="problem-card" href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="noopener"><span class="pc-num">№ 127</span><span class="pc-title">Word Ladder</span><span class="pc-diff hard">Hard</span></a>
     </div>
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="algorithms.html#bfs">BFS on graphs</a>
+    <a class="cross-chip" href="algorithms.html#dfs">DFS on graphs</a>
+    <a class="cross-chip" href="algorithms.html#topo">Topological Sort</a>
+    <a class="cross-chip" href="algorithms.html#dijkstra">Dijkstra's shortest path</a>
   </div>
 </section>
 

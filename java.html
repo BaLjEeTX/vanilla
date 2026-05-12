@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Java Toolkit — The DSA Codex</title>
 <link rel="stylesheet" href="styles.css" />
+<script>
+  (function(){var t=localStorage.getItem('codex-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
 </head>
 <body>
 
@@ -16,7 +19,25 @@
     <li><a href="algorithms.html">Algorithms</a></li>
     <li><a href="java.html" class="active">Java Toolkit</a></li>
   </ul>
+  <div class="nav-right">
+    <button id="search-btn" title="Search (Ctrl+K / ⌘K)">⌕ Search <span class="kbd">⌘K</span></button>
+    <button id="focus-btn" title="Distraction-free reading">⊡</button>
+    <button id="theme-toggle" title="Toggle dark mode">◑</button>
+  </div>
 </nav>
+
+<div class="progress-strip">
+  <div class="progress-bar-track"><div id="progress-bar-fill"></div></div>
+  <span id="progress-label">0 / 11 sections complete</span>
+</div>
+
+<!-- Search overlay -->
+<div id="search-overlay">
+  <div class="search-box">
+    <input id="search-input" type="text" placeholder="Search all chapters…" autocomplete="off" spellcheck="false" />
+    <div id="search-results"><p class="search-hint">Type to search across all chapters…</p></div>
+  </div>
+</div>
 
 <header class="hero">
   <div class="hero-eyebrow">Chapter IV · The right Java, nothing more</div>
@@ -234,6 +255,13 @@ List&lt;Integer&gt; fromSet = <span class="tok-kw">new</span> ArrayList&lt;&gt;(
 <span class="tok-com">// char[] → String</span>
 String back = <span class="tok-kw">new</span> String(chars);</code></pre>
   </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="data-structures.html#hashmap">HashMap & HashSet</a>
+    <a class="cross-chip" href="data-structures.html#treemap">TreeMap & TreeSet</a>
+    <a class="cross-chip" href="data-structures.html#heap">Heap / PriorityQueue</a>
+    <a class="cross-chip" href="data-structures.html#stack">Stack</a>
+  </div>
 </section>
 
 <!-- ============ COMPARATOR ============ -->
@@ -278,6 +306,12 @@ people.sort(Comparator.comparing(Person::getAge).reversed());</code></pre>
   <div class="callout">
     <div class="callout-title">The <code class="inline">b - a</code> overflow trap</div>
     <code class="inline">(a, b) -&gt; b - a</code> looks elegant but breaks when <code class="inline">b</code> is very negative and <code class="inline">a</code> is very positive — the subtraction overflows. For competitive-style problems with wide ranges, always use <code class="inline">Integer.compare(b, a)</code> or <code class="inline">Long.compare(...)</code>.
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="algorithms.html#sorting">Sorting patterns</a>
+    <a class="cross-chip" href="data-structures.html#heap">Custom heap ordering</a>
+    <a class="cross-chip" href="algorithms.html#greedy">Greedy + custom sort</a>
   </div>
 </section>
 

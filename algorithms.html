@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Algorithms — The DSA Codex</title>
 <link rel="stylesheet" href="styles.css" />
+<script>
+  (function(){var t=localStorage.getItem('codex-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
 </head>
 <body>
 
@@ -16,7 +19,25 @@
     <li><a href="algorithms.html" class="active">Algorithms</a></li>
     <li><a href="java.html">Java Toolkit</a></li>
   </ul>
+  <div class="nav-right">
+    <button id="search-btn" title="Search (Ctrl+K / ⌘K)">⌕ Search <span class="kbd">⌘K</span></button>
+    <button id="focus-btn" title="Distraction-free reading">⊡</button>
+    <button id="theme-toggle" title="Toggle dark mode">◑</button>
+  </div>
 </nav>
+
+<div class="progress-strip">
+  <div class="progress-bar-track"><div id="progress-bar-fill"></div></div>
+  <span id="progress-label">0 / 16 sections complete</span>
+</div>
+
+<!-- Search overlay -->
+<div id="search-overlay">
+  <div class="search-box">
+    <input id="search-input" type="text" placeholder="Search all chapters…" autocomplete="off" spellcheck="false" />
+    <div id="search-results"><p class="search-hint">Type to search across all chapters…</p></div>
+  </div>
+</div>
 
 <header class="hero">
   <div class="hero-eyebrow">Chapter III · The patterns of problem-solving</div>
@@ -533,6 +554,12 @@ Arrays.sort(pairs, (a, b) -&gt; {
       <a class="problem-card" href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="noopener"><span class="pc-num">№ 127</span><span class="pc-title">Word Ladder</span><span class="pc-diff hard">Hard</span></a>
     </div>
   </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="data-structures.html#queue">Queue (BFS's engine)</a>
+    <a class="cross-chip" href="data-structures.html#graph">Graph representation</a>
+    <a class="cross-chip" href="algorithms.html#topo">Topological Sort (BFS variant)</a>
+  </div>
 </section>
 
 <!-- ============ DFS ============ -->
@@ -586,6 +613,12 @@ Arrays.sort(pairs, (a, b) -&gt; {
       <a class="problem-card" href="https://leetcode.com/problems/path-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 112</span><span class="pc-title">Path Sum</span><span class="pc-diff easy">Easy</span></a>
       <a class="problem-card" href="https://leetcode.com/problems/surrounded-regions/" target="_blank" rel="noopener"><span class="pc-num">№ 130</span><span class="pc-title">Surrounded Regions</span><span class="pc-diff medium">Medium</span></a>
     </div>
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="data-structures.html#stack">Stack (DFS's engine)</a>
+    <a class="cross-chip" href="data-structures.html#graph">Graph representation</a>
+    <a class="cross-chip" href="algorithms.html#backtracking">Backtracking (DFS + pruning)</a>
   </div>
 </section>
 
@@ -685,6 +718,12 @@ Arrays.sort(pairs, (a, b) -&gt; {
       <a class="problem-card" href="https://leetcode.com/problems/path-with-minimum-effort/" target="_blank" rel="noopener"><span class="pc-num">№ 1631</span><span class="pc-title">Path With Minimum Effort</span><span class="pc-diff medium">Medium</span></a>
       <a class="problem-card" href="https://leetcode.com/problems/swim-in-rising-water/" target="_blank" rel="noopener"><span class="pc-num">№ 778</span><span class="pc-title">Swim in Rising Water</span><span class="pc-diff hard">Hard</span></a>
     </div>
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="data-structures.html#heap">Heap / PriorityQueue</a>
+    <a class="cross-chip" href="data-structures.html#graph">Graph representation</a>
+    <a class="cross-chip" href="algorithms.html#bfs">BFS for unweighted paths</a>
   </div>
 </section>
 
@@ -827,6 +866,12 @@ Arrays.sort(pairs, (a, b) -&gt; {
       <a class="problem-card" href="https://leetcode.com/problems/edit-distance/" target="_blank" rel="noopener"><span class="pc-num">№ 72</span><span class="pc-title">Edit Distance</span><span class="pc-diff medium">Medium</span></a>
       <a class="problem-card" href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="noopener"><span class="pc-num">№ 10</span><span class="pc-title">Regular Expression Matching</span><span class="pc-diff hard">Hard</span></a>
     </div>
+  </div>
+  <div class="cross-links">
+    <span class="cross-links-label">See also</span>
+    <a class="cross-chip" href="algorithms.html#recursion">Recursion (DP foundation)</a>
+    <a class="cross-chip" href="data-structures.html#hashmap">HashMap for memoization</a>
+    <a class="cross-chip" href="index.html#space">Space: O(n) DP tables</a>
   </div>
 </section>
 
