@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Structures — The DSA Codex</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html" class="brand">The DSA Codex</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Complexity</a></li>
+    <li><a href="data-structures.html" class="active">Data Structures</a></li>
+    <li><a href="algorithms.html">Algorithms</a></li>
+    <li><a href="java.html">Java Toolkit</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">Chapter II · The containers of computation</div>
+  <h1>Data <em>Structures</em></h1>
+  <p class="hero-sub">Every problem you'll ever solve starts with picking the right container for your data. Learn the twelve that matter—why they exist, when to reach for them, and how to wield them in Java.</p>
+</header>
+
+<div class="layout">
+
+<aside class="toc">
+  <div class="toc-title">Chapter II · Contents</div>
+  <ol>
+    <li><a href="#array">Arrays</a></li>
+    <li><a href="#string">Strings</a></li>
+    <li><a href="#arraylist">ArrayList</a></li>
+    <li><a href="#linkedlist">Linked List</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#queue">Queue & Deque</a></li>
+    <li><a href="#hashmap">HashMap & HashSet</a></li>
+    <li><a href="#treemap">TreeMap & TreeSet</a></li>
+    <li><a href="#heap">Heap / PriorityQueue</a></li>
+    <li><a href="#tree">Binary Tree</a></li>
+    <li><a href="#bst">Binary Search Tree</a></li>
+    <li><a href="#trie">Trie</a></li>
+    <li><a href="#graph">Graph</a></li>
+    <li><a href="#unionfind">Union-Find</a></li>
+  </ol>
+</aside>
+
+<article class="content">
+
+<!-- ============ ARRAY ============ -->
+<section class="topic" id="array">
+  <div class="section-number">§ 1 · Array</div>
+  <h2 class="topic-title">Array</h2>
+  <p class="dropcap">An array is a row of numbered lockers in a school hallway. Each locker holds one item. You can walk straight to locker №7 instantly because the lockers are evenly spaced and numbered—you don't have to check the other lockers first. That instant-access property is what makes arrays the fastest "go fetch me item X" structure that exists.</p>
+
+  <div class="analogy">
+    Lockers are <em>fixed in place</em>. To insert a new locker between №3 and №4, you'd have to physically shove every locker from №4 onward down the hallway. That's why <strong>inserting into the middle of an array is slow</strong>—everyone has to shift over.
+  </div>
+
+  <h3 class="subhead">When to reach for it</h3>
+  <ul class="list">
+    <li>You know roughly how many elements you need.</li>
+    <li>You need fast index access (e.g., <code class="inline">nums[i]</code>).</li>
+    <li>You're iterating over a fixed list, not constantly inserting in the middle.</li>
+  </ul>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Declare & initialize</span>
+<span class="tok-typ">int</span>[] nums = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[<span class="tok-num">10</span>];           <span class="tok-com">// all zeros</span>
+<span class="tok-typ">int</span>[] vals = {<span class="tok-num">3</span>, <span class="tok-num">1</span>, <span class="tok-num">4</span>, <span class="tok-num">1</span>, <span class="tok-num">5</span>, <span class="tok-num">9</span>};   <span class="tok-com">// literal</span>
+
+<span class="tok-com">// Access — O(1)</span>
+<span class="tok-typ">int</span> first = vals[<span class="tok-num">0</span>];
+<span class="tok-typ">int</span> len   = vals.length;        <span class="tok-com">// no parentheses!</span>
+
+<span class="tok-com">// Iterate</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; vals.length; i++) { ... }
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> v : vals) { ... }      <span class="tok-com">// enhanced-for</span>
+
+<span class="tok-com">// 2D array</span>
+<span class="tok-typ">int</span>[][] grid = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[<span class="tok-num">3</span>][<span class="tok-num">4</span>];     <span class="tok-com">// 3 rows, 4 cols</span>
+
+<span class="tok-com">// Useful Arrays utility</span>
+Arrays.sort(vals);                <span class="tok-com">// in-place, O(n log n)</span>
+Arrays.fill(nums, -<span class="tok-num">1</span>);             <span class="tok-com">// set every element to -1</span>
+<span class="tok-typ">int</span>[] copy = Arrays.copyOf(vals, vals.length);</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Common pitfall</div>
+    <code class="inline">vals.length</code> has <em>no parentheses</em>—it's a field, not a method. Strings use <code class="inline">.length()</code> (method). Collections use <code class="inline">.size()</code>. Mixing these up is a classic Java gotcha.
+  </div>
+
+  <h3 class="subhead">Complexity</h3>
+  <table class="complexity">
+    <tbody>
+      <tr><td>Access by index</td><td><span class="bigO good">O(1)</span></td></tr>
+      <tr><td>Search for value</td><td><span class="bigO bad">O(n)</span></td></tr>
+      <tr><td>Insert at end (fixed array)</td><td>—</td></tr>
+      <tr><td>Insert at middle</td><td><span class="bigO bad">O(n)</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 1</span><span class="pc-title">Two Sum</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/contains-duplicate/" target="_blank" rel="noopener"><span class="pc-num">№ 217</span><span class="pc-title">Contains Duplicate</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/product-of-array-except-self/" target="_blank" rel="noopener"><span class="pc-num">№ 238</span><span class="pc-title">Product of Array Except Self</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/rotate-array/" target="_blank" rel="noopener"><span class="pc-num">№ 189</span><span class="pc-title">Rotate Array</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/merge-sorted-array/" target="_blank" rel="noopener"><span class="pc-num">№ 88</span><span class="pc-title">Merge Sorted Array</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/first-missing-positive/" target="_blank" rel="noopener"><span class="pc-num">№ 41</span><span class="pc-title">First Missing Positive</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STRING ============ -->
+<section class="topic" id="string">
+  <div class="section-number">§ 2 · String</div>
+  <h2 class="topic-title">String</h2>
+  <p class="dropcap">A String is just an array of characters wearing a fancy dress. The key fact in Java: <strong>Strings are immutable.</strong> Once created, you cannot change a character. Every "modification" actually creates a brand-new String. This is great for safety, terrible for performance if you build a string inside a loop.</p>
+
+  <div class="analogy">
+    Treat a String like a printed page. You can read any letter, count letters, copy the page—but you can't erase letter 7 and write a new one in its place. To "edit," you reprint the whole page. That's why we use <code class="inline">StringBuilder</code> for repeated edits—it's like writing in pencil.
+  </div>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>String s = <span class="tok-str">"hello"</span>;
+<span class="tok-typ">int</span> n   = s.length();          <span class="tok-com">// method, with parens!</span>
+<span class="tok-typ">char</span> c  = s.charAt(<span class="tok-num">0</span>);          <span class="tok-com">// 'h'</span>
+
+<span class="tok-com">// Compare with .equals() — NEVER ==</span>
+<span class="tok-kw">if</span> (s.equals(<span class="tok-str">"hello"</span>)) { ... }
+<span class="tok-kw">if</span> (s.equalsIgnoreCase(<span class="tok-str">"HELLO"</span>)) { ... }
+
+<span class="tok-com">// Slicing</span>
+String sub = s.substring(<span class="tok-num">1</span>, <span class="tok-num">4</span>);   <span class="tok-com">// "ell" — [start, end)</span>
+
+<span class="tok-com">// Convert to char array</span>
+<span class="tok-typ">char</span>[] chars = s.toCharArray();
+
+<span class="tok-com">// Building strings — USE StringBuilder for loops</span>
+StringBuilder sb = <span class="tok-kw">new</span> StringBuilder();
+<span class="tok-kw">for</span> (<span class="tok-typ">char</span> ch : chars) sb.append(ch);
+String result = sb.toString();</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The == trap</div>
+    <code class="inline">s1 == s2</code> compares <em>references</em>, not content. Always use <code class="inline">s1.equals(s2)</code>. This trips up every Java beginner exactly once—make sure it's just once.
+  </div>
+
+  <h3 class="subhead">Character tricks</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Lowercase letter to index 0-25</span>
+<span class="tok-typ">int</span> idx = c - <span class="tok-str">'a'</span>;
+
+<span class="tok-com">// Digit char to int</span>
+<span class="tok-typ">int</span> d = c - <span class="tok-str">'0'</span>;
+
+<span class="tok-com">// Character helpers</span>
+Character.isLetter(c);
+Character.isDigit(c);
+Character.toLowerCase(c);</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener"><span class="pc-num">№ 242</span><span class="pc-title">Valid Anagram</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/valid-palindrome/" target="_blank" rel="noopener"><span class="pc-num">№ 125</span><span class="pc-title">Valid Palindrome</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/reverse-string/" target="_blank" rel="noopener"><span class="pc-num">№ 344</span><span class="pc-title">Reverse String</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/longest-common-prefix/" target="_blank" rel="noopener"><span class="pc-num">№ 14</span><span class="pc-title">Longest Common Prefix</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener"><span class="pc-num">№ 49</span><span class="pc-title">Group Anagrams</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/string-to-integer-atoi/" target="_blank" rel="noopener"><span class="pc-num">№ 8</span><span class="pc-title">String to Integer (atoi)</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARRAYLIST ============ -->
+<section class="topic" id="arraylist">
+  <div class="section-number">§ 3 · ArrayList</div>
+  <h2 class="topic-title">ArrayList</h2>
+  <p class="dropcap">An ArrayList is an array that grows. Underneath, it's still a regular array—but when it fills up, it secretly creates a bigger one (typically 1.5× the size), copies everything over, and you keep adding. From the outside, it just feels like a list that never runs out of space.</p>
+
+  <div class="analogy">
+    Imagine a row of lockers that, whenever you fill the last one, magically clones itself into a longer hallway with more lockers. You barely notice—and on average, adding a new locker costs almost nothing. That's amortized O(1).
+  </div>
+
+  <h3 class="subhead">When to use ArrayList over array</h3>
+  <ul class="list">
+    <li>You don't know the final size in advance.</li>
+    <li>You need built-in helpers like <code class="inline">contains</code>, <code class="inline">indexOf</code>, <code class="inline">remove</code>.</li>
+    <li>You want it to play nicely with Java's Collections framework (<code class="inline">Collections.sort</code>, streams, etc.).</li>
+  </ul>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>List&lt;Integer&gt; list = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+
+list.add(<span class="tok-num">10</span>);                  <span class="tok-com">// append, amortized O(1)</span>
+list.add(<span class="tok-num">0</span>, <span class="tok-num">99</span>);               <span class="tok-com">// insert at index, O(n)</span>
+list.get(<span class="tok-num">2</span>);                  <span class="tok-com">// O(1)</span>
+list.set(<span class="tok-num">2</span>, <span class="tok-num">77</span>);               <span class="tok-com">// overwrite, O(1)</span>
+list.remove(<span class="tok-num">2</span>);               <span class="tok-com">// remove by index, O(n)</span>
+list.remove(Integer.valueOf(<span class="tok-num">77</span>)); <span class="tok-com">// remove by VALUE</span>
+list.size();                  <span class="tok-com">// .size() — method</span>
+list.contains(<span class="tok-num">10</span>);            <span class="tok-com">// O(n) — slow!</span>
+
+<span class="tok-com">// Iterate</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> v : list) { ... }
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; list.size(); i++) { ... }
+
+<span class="tok-com">// Sort</span>
+Collections.sort(list);
+list.sort(Comparator.reverseOrder());</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The remove() gotcha</div>
+    <code class="inline">list.remove(2)</code> on a <code class="inline">List&lt;Integer&gt;</code> removes the element <em>at index 2</em>, not the value 2. To remove the value 2, write <code class="inline">list.remove(Integer.valueOf(2))</code>. This bug has hidden in production for decades.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/squares-of-a-sorted-array/" target="_blank" rel="noopener"><span class="pc-num">№ 977</span><span class="pc-title">Squares of a Sorted Array</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/spiral-matrix/" target="_blank" rel="noopener"><span class="pc-num">№ 54</span><span class="pc-title">Spiral Matrix</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/pascals-triangle/" target="_blank" rel="noopener"><span class="pc-num">№ 118</span><span class="pc-title">Pascal's Triangle</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener"><span class="pc-num">№ 15</span><span class="pc-title">3Sum</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LINKED LIST ============ -->
+<section class="topic" id="linkedlist">
+  <div class="section-number">§ 4 · Linked List</div>
+  <h2 class="topic-title">Linked List</h2>
+  <p class="dropcap">A linked list is a paper chain. Each link holds one piece of data and a pointer—an arrow—to the next link. You can't jump to the middle: you have to follow the arrows from the start. The payoff? Inserting or deleting in the middle is instant—you just snip and re-attach two pointers.</p>
+
+  <div class="analogy">
+    Arrays are a row of houses with street numbers; you drive straight to №42. A linked list is a treasure hunt: each clue tells you where the <em>next</em> clue is. Finding clue 42 means following clues 1, 2, 3 … in order. But adding a new clue between №3 and №4? Trivial—just rewrite two arrows.
+  </div>
+
+  <h3 class="subhead">The node, hand-built</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">class</span> <span class="tok-typ">ListNode</span> {
+    <span class="tok-typ">int</span> val;
+    <span class="tok-typ">ListNode</span> next;
+    <span class="tok-typ">ListNode</span>(<span class="tok-typ">int</span> val) { <span class="tok-kw">this</span>.val = val; }
+}</code></pre>
+  </div>
+  <p>You'll see this exact class on almost every LeetCode linked-list problem. Memorize it.</p>
+
+  <h3 class="subhead">The four moves you must know</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// 1. Traverse</span>
+<span class="tok-typ">ListNode</span> cur = head;
+<span class="tok-kw">while</span> (cur != <span class="tok-kw">null</span>) {
+    System.out.println(cur.val);
+    cur = cur.next;
+}
+
+<span class="tok-com">// 2. Reverse a linked list — THE classic technique</span>
+<span class="tok-typ">ListNode</span> prev = <span class="tok-kw">null</span>, curr = head;
+<span class="tok-kw">while</span> (curr != <span class="tok-kw">null</span>) {
+    <span class="tok-typ">ListNode</span> next = curr.next;   <span class="tok-com">// save next</span>
+    curr.next = prev;             <span class="tok-com">// flip arrow</span>
+    prev = curr;                  <span class="tok-com">// advance prev</span>
+    curr = next;                  <span class="tok-com">// advance curr</span>
+}
+<span class="tok-kw">return</span> prev;                      <span class="tok-com">// new head</span>
+
+<span class="tok-com">// 3. Find the middle — slow/fast pointers</span>
+<span class="tok-typ">ListNode</span> slow = head, fast = head;
+<span class="tok-kw">while</span> (fast != <span class="tok-kw">null</span> &amp;&amp; fast.next != <span class="tok-kw">null</span>) {
+    slow = slow.next;
+    fast = fast.next.next;
+}
+<span class="tok-com">// slow is now at the middle</span>
+
+<span class="tok-com">// 4. Detect a cycle — Floyd's tortoise &amp; hare</span>
+<span class="tok-typ">ListNode</span> t = head, h = head;
+<span class="tok-kw">while</span> (h != <span class="tok-kw">null</span> &amp;&amp; h.next != <span class="tok-kw">null</span>) {
+    t = t.next;
+    h = h.next.next;
+    <span class="tok-kw">if</span> (t == h) <span class="tok-kw">return</span> <span class="tok-kw">true</span>;     <span class="tok-com">// cycle exists</span>
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The dummy node trick</div>
+    When building a new linked list, create a "dummy" head node first: <code class="inline">ListNode dummy = new ListNode(0);</code>. Build off <code class="inline">dummy.next</code>, and return <code class="inline">dummy.next</code> at the end. This eliminates ugly null-checks for the first element.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/reverse-linked-list/" target="_blank" rel="noopener"><span class="pc-num">№ 206</span><span class="pc-title">Reverse Linked List</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/merge-two-sorted-lists/" target="_blank" rel="noopener"><span class="pc-num">№ 21</span><span class="pc-title">Merge Two Sorted Lists</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/linked-list-cycle/" target="_blank" rel="noopener"><span class="pc-num">№ 141</span><span class="pc-title">Linked List Cycle</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/middle-of-the-linked-list/" target="_blank" rel="noopener"><span class="pc-num">№ 876</span><span class="pc-title">Middle of the Linked List</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/remove-nth-node-from-end-of-list/" target="_blank" rel="noopener"><span class="pc-num">№ 19</span><span class="pc-title">Remove Nth Node From End</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/add-two-numbers/" target="_blank" rel="noopener"><span class="pc-num">№ 2</span><span class="pc-title">Add Two Numbers</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/reorder-list/" target="_blank" rel="noopener"><span class="pc-num">№ 143</span><span class="pc-title">Reorder List</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/copy-list-with-random-pointer/" target="_blank" rel="noopener"><span class="pc-num">№ 138</span><span class="pc-title">Copy List with Random Pointer</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STACK ============ -->
+<section class="topic" id="stack">
+  <div class="section-number">§ 5 · Stack</div>
+  <h2 class="topic-title">Stack</h2>
+  <p class="dropcap">A stack is a pile of dirty plates. You add a plate on top; you take a plate from the top. Last in, first out (LIFO). You never reach into the middle. That's the entire structure—and it's astonishingly useful: undo buttons, function call stacks, matching brackets, "next greater element" problems, and DFS all run on stacks.</p>
+
+  <div class="analogy">
+    A stack is your browser's Back button. Each page you visit gets pushed on top. When you hit Back, you pop the most recent one and reveal whatever was beneath. You can't jump three pages back without popping the two in between.
+  </div>
+
+  <h3 class="subhead">Use cases that scream "stack"</h3>
+  <ul class="list">
+    <li><strong>Matching pairs</strong> — brackets, tags, parentheses.</li>
+    <li><strong>"Next greater / smaller" problems</strong> — monotonic stack pattern.</li>
+    <li><strong>Undo / history</strong> — last action first to reverse.</li>
+    <li><strong>Reversing</strong> — pop order is the reverse of push order.</li>
+    <li><strong>Recursive simulation</strong> — when you don't want true recursion.</li>
+  </ul>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Don't use the legacy `Stack` class — use ArrayDeque</span>
+Deque&lt;Integer&gt; stack = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+
+stack.push(<span class="tok-num">1</span>);            <span class="tok-com">// add to top</span>
+stack.push(<span class="tok-num">2</span>);
+stack.push(<span class="tok-num">3</span>);
+<span class="tok-typ">int</span> top = stack.peek();   <span class="tok-com">// look at top → 3</span>
+<span class="tok-typ">int</span> out = stack.pop();    <span class="tok-com">// remove top → 3</span>
+<span class="tok-kw">boolean</span> empty = stack.isEmpty();</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Why not <code class="inline">java.util.Stack</code>?</div>
+    The old <code class="inline">Stack</code> class extends <code class="inline">Vector</code>, which is synchronized and slow. Every modern Java guide and interviewer prefers <code class="inline">ArrayDeque</code> for stack behavior.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener"><span class="pc-num">№ 20</span><span class="pc-title">Valid Parentheses</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/min-stack/" target="_blank" rel="noopener"><span class="pc-num">№ 155</span><span class="pc-title">Min Stack</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/evaluate-reverse-polish-notation/" target="_blank" rel="noopener"><span class="pc-num">№ 150</span><span class="pc-title">Evaluate Reverse Polish</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener"><span class="pc-num">№ 739</span><span class="pc-title">Daily Temperatures</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/next-greater-element-i/" target="_blank" rel="noopener"><span class="pc-num">№ 496</span><span class="pc-title">Next Greater Element I</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener"><span class="pc-num">№ 84</span><span class="pc-title">Largest Rectangle in Histogram</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUEUE / DEQUE ============ -->
+<section class="topic" id="queue">
+  <div class="section-number">§ 6 · Queue & Deque</div>
+  <h2 class="topic-title">Queue & Deque</h2>
+  <p class="dropcap">A queue is a line at a chai stall. The first person to arrive is the first served. First in, first out (FIFO). A deque ("deck") is a double-ended queue—you can add or remove from either end. The queue is the bedrock of BFS (breadth-first search); the deque is what powers the sliding-window-maximum pattern.</p>
+
+  <div class="analogy">
+    Imagine a printer queue. Documents print in the order they were submitted. You can't make page 5 print before page 1 just because you really need it—you'd have to cancel everything before it. That fairness, that strict order, is the queue's whole personality.
+  </div>
+
+  <h3 class="subhead">Java essentials — Queue</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>Queue&lt;Integer&gt; queue = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+<span class="tok-com">// or:  Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();</span>
+
+queue.offer(<span class="tok-num">1</span>);          <span class="tok-com">// enqueue (returns false if full)</span>
+queue.offer(<span class="tok-num">2</span>);
+<span class="tok-typ">int</span> head = queue.peek(); <span class="tok-com">// look — null if empty</span>
+<span class="tok-typ">int</span> out  = queue.poll(); <span class="tok-com">// dequeue — null if empty</span>
+<span class="tok-kw">boolean</span> e = queue.isEmpty();</code></pre>
+  </div>
+
+  <h3 class="subhead">Java essentials — Deque</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>Deque&lt;Integer&gt; dq = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+
+dq.offerFirst(<span class="tok-num">1</span>);      <span class="tok-com">// add to front</span>
+dq.offerLast(<span class="tok-num">2</span>);       <span class="tok-com">// add to back</span>
+dq.peekFirst();
+dq.peekLast();
+dq.pollFirst();        <span class="tok-com">// remove from front</span>
+dq.pollLast();         <span class="tok-com">// remove from back</span></code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Why prefer <code class="inline">offer/poll/peek</code></div>
+    The other set (<code class="inline">add/remove/element</code>) throws exceptions on edge cases. <code class="inline">offer/poll/peek</code> return special values (<code class="inline">false</code>, <code class="inline">null</code>)—much friendlier in loops.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/implement-queue-using-stacks/" target="_blank" rel="noopener"><span class="pc-num">№ 232</span><span class="pc-title">Implement Queue using Stacks</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/number-of-recent-calls/" target="_blank" rel="noopener"><span class="pc-num">№ 933</span><span class="pc-title">Number of Recent Calls</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener"><span class="pc-num">№ 239</span><span class="pc-title">Sliding Window Maximum</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/design-circular-queue/" target="_blank" rel="noopener"><span class="pc-num">№ 622</span><span class="pc-title">Design Circular Queue</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HASHMAP / HASHSET ============ -->
+<section class="topic" id="hashmap">
+  <div class="section-number">§ 7 · HashMap & HashSet</div>
+  <h2 class="topic-title">HashMap & HashSet</h2>
+  <p class="dropcap">If arrays are lockers in a hallway, a HashMap is the postal system. You hand the postman a name ("Riya Mehta"), and somehow—without checking every house—he delivers your letter to the right address in one step. The magic ingredient is a <em>hash function</em> that converts the name into an array index. HashMap stores key→value pairs; HashSet stores just keys ("is this name in the system?").</p>
+
+  <div class="analogy">
+    Imagine a library where every book's location is computed from its title. Hand me <em>"To Kill a Mockingbird"</em>, I run it through a formula, and I'm at row 47, shelf 3 in one move—no scanning shelves. That's what hashing buys you: O(1) lookup, on average.
+  </div>
+
+  <h3 class="subhead">When to reach for it (almost always)</h3>
+  <ul class="list">
+    <li>"Have I seen this before?" → HashSet.</li>
+    <li>"How many times has X appeared?" → HashMap&lt;X, Integer&gt; (frequency map).</li>
+    <li>"Given a value, fetch its associated data fast." → HashMap.</li>
+    <li>Deduplication, caching, lookups by key.</li>
+  </ul>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// HashMap</span>
+Map&lt;String, Integer&gt; map = <span class="tok-kw">new</span> HashMap&lt;&gt;();
+
+map.put(<span class="tok-str">"apple"</span>, <span class="tok-num">3</span>);
+map.get(<span class="tok-str">"apple"</span>);            <span class="tok-com">// 3, or null if absent</span>
+map.getOrDefault(<span class="tok-str">"pear"</span>, <span class="tok-num">0</span>); <span class="tok-com">// 0 if missing — clutch for counters</span>
+map.containsKey(<span class="tok-str">"apple"</span>);
+map.remove(<span class="tok-str">"apple"</span>);
+
+<span class="tok-com">// Frequency counter — the most common map pattern</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">char</span> c : s.toCharArray()) {
+    map.put(c, map.getOrDefault(c, <span class="tok-num">0</span>) + <span class="tok-num">1</span>);
+}
+
+<span class="tok-com">// Iterate</span>
+<span class="tok-kw">for</span> (Map.Entry&lt;String, Integer&gt; e : map.entrySet()) {
+    System.out.println(e.getKey() + <span class="tok-str">" → "</span> + e.getValue());
+}
+
+<span class="tok-com">// HashSet</span>
+Set&lt;Integer&gt; seen = <span class="tok-kw">new</span> HashSet&lt;&gt;();
+seen.add(<span class="tok-num">5</span>);
+<span class="tok-kw">if</span> (seen.contains(<span class="tok-num">5</span>)) { ... }
+seen.remove(<span class="tok-num">5</span>);</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Custom keys</div>
+    If you use your own class as a HashMap key, override both <code class="inline">equals()</code> and <code class="inline">hashCode()</code>. Forgetting either is one of Java's most common bugs. For DSA problems, <code class="inline">String</code>, <code class="inline">Integer</code>, <code class="inline">Long</code>, and similar wrappers do this for you.
+    <br/><br/>
+    For pair-keys (like grid coordinates), encode them as a String <code class="inline">i + "," + j</code> or as a <code class="inline">long</code> via <code class="inline">(long)i * COLS + j</code>.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 1</span><span class="pc-title">Two Sum</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener"><span class="pc-num">№ 242</span><span class="pc-title">Valid Anagram</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/contains-duplicate/" target="_blank" rel="noopener"><span class="pc-num">№ 217</span><span class="pc-title">Contains Duplicate</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener"><span class="pc-num">№ 49</span><span class="pc-title">Group Anagrams</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/top-k-frequent-elements/" target="_blank" rel="noopener"><span class="pc-num">№ 347</span><span class="pc-title">Top K Frequent Elements</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener"><span class="pc-num">№ 128</span><span class="pc-title">Longest Consecutive Sequence</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/subarray-sum-equals-k/" target="_blank" rel="noopener"><span class="pc-num">№ 560</span><span class="pc-title">Subarray Sum Equals K</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/lru-cache/" target="_blank" rel="noopener"><span class="pc-num">№ 146</span><span class="pc-title">LRU Cache</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TREEMAP / TREESET ============ -->
+<section class="topic" id="treemap">
+  <div class="section-number">§ 8 · TreeMap & TreeSet</div>
+  <h2 class="topic-title">TreeMap & TreeSet</h2>
+  <p class="dropcap">A HashMap doesn't care about order—it scatters keys based on a hash. A TreeMap keeps its keys <strong>sorted</strong> at all times. It's slower per operation (O(log n) instead of O(1)), but in return it answers questions HashMap can't: "what's the smallest key bigger than X?" or "give me every key between A and B."</p>
+
+  <div class="analogy">
+    HashMap is a chaotic warehouse where every item has its own scanner-readable QR code. Fast pickup, terrible if you ever want to walk through items in alphabetical order. TreeMap is a librarian-curated bookshelf—every book where it belongs, slightly slower to add a new one, but you can find every book between "Hemingway" and "Hugo" in one walk.
+  </div>
+
+  <h3 class="subhead">When to use TreeMap over HashMap</h3>
+  <ul class="list">
+    <li>You need keys in sorted order during iteration.</li>
+    <li>You need "ceiling" or "floor" queries — smallest key ≥ X, or largest key ≤ X.</li>
+    <li>You need range queries — all keys between A and B.</li>
+  </ul>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>TreeMap&lt;Integer, String&gt; tm = <span class="tok-kw">new</span> TreeMap&lt;&gt;();
+tm.put(<span class="tok-num">3</span>, <span class="tok-str">"c"</span>);
+tm.put(<span class="tok-num">1</span>, <span class="tok-str">"a"</span>);
+tm.put(<span class="tok-num">5</span>, <span class="tok-str">"e"</span>);
+
+tm.firstKey();           <span class="tok-com">// 1</span>
+tm.lastKey();            <span class="tok-com">// 5</span>
+tm.ceilingKey(<span class="tok-num">2</span>);        <span class="tok-com">// 3 (smallest ≥ 2)</span>
+tm.floorKey(<span class="tok-num">4</span>);          <span class="tok-com">// 3 (largest ≤ 4)</span>
+tm.higherKey(<span class="tok-num">3</span>);         <span class="tok-com">// 5 (strictly &gt; 3)</span>
+tm.lowerKey(<span class="tok-num">3</span>);          <span class="tok-com">// 1 (strictly &lt; 3)</span>
+tm.subMap(<span class="tok-num">2</span>, <span class="tok-num">5</span>);         <span class="tok-com">// view: [2, 5)</span>
+
+<span class="tok-com">// TreeSet is the same idea, no values</span>
+TreeSet&lt;Integer&gt; ts = <span class="tok-kw">new</span> TreeSet&lt;&gt;();</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/time-based-key-value-store/" target="_blank" rel="noopener"><span class="pc-num">№ 981</span><span class="pc-title">Time Based Key-Value Store</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/my-calendar-i/" target="_blank" rel="noopener"><span class="pc-num">№ 729</span><span class="pc-title">My Calendar I</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/contains-duplicate-iii/" target="_blank" rel="noopener"><span class="pc-num">№ 220</span><span class="pc-title">Contains Duplicate III</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HEAP ============ -->
+<section class="topic" id="heap">
+  <div class="section-number">§ 9 · Heap / PriorityQueue</div>
+  <h2 class="topic-title">Heap / PriorityQueue</h2>
+  <p class="dropcap">A heap is a hospital ER. Patients aren't seen in arrival order—they're seen in order of urgency. The receptionist always knows who the most critical patient is. Whenever a new patient walks in, they're slotted into the right priority. That's a heap: peek at the smallest (or largest) item in O(1), insert in O(log n), remove the top in O(log n).</p>
+
+  <div class="analogy">
+    Picture a pyramid of bowling balls where the lightest is always on top. Add a new ball: it sinks until lighter balls float above it. Remove the lightest: the next-lightest bubbles up to take its place. The pyramid never sorts itself fully—it only guarantees the top is correct, which is exactly what you need most of the time.
+  </div>
+
+  <h3 class="subhead">Use cases that scream "heap"</h3>
+  <ul class="list">
+    <li><strong>K-th largest / smallest</strong> — keep a heap of size K.</li>
+    <li><strong>Merge K sorted lists</strong> — heap of list heads.</li>
+    <li><strong>Dijkstra's shortest path</strong> — extract the closest unvisited node.</li>
+    <li><strong>Scheduling</strong> — always pick the most urgent next.</li>
+    <li><strong>Running median</strong> — two heaps facing each other.</li>
+  </ul>
+
+  <h3 class="subhead">Java essentials</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Min-heap (default)</span>
+PriorityQueue&lt;Integer&gt; minHeap = <span class="tok-kw">new</span> PriorityQueue&lt;&gt;();
+minHeap.offer(<span class="tok-num">5</span>);
+minHeap.offer(<span class="tok-num">1</span>);
+minHeap.offer(<span class="tok-num">3</span>);
+minHeap.peek();      <span class="tok-com">// 1 — smallest</span>
+minHeap.poll();      <span class="tok-com">// 1, removes it</span>
+
+<span class="tok-com">// Max-heap — supply a reverse comparator</span>
+PriorityQueue&lt;Integer&gt; maxHeap =
+    <span class="tok-kw">new</span> PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+
+<span class="tok-com">// Heap of custom objects: sort by 2nd field ascending</span>
+PriorityQueue&lt;<span class="tok-typ">int</span>[]&gt; pq =
+    <span class="tok-kw">new</span> PriorityQueue&lt;&gt;((a, b) -&gt; a[<span class="tok-num">1</span>] - b[<span class="tok-num">1</span>]);
+
+<span class="tok-com">// K-th largest: maintain a min-heap of size K</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">findKthLargest</span>(<span class="tok-typ">int</span>[] nums, <span class="tok-typ">int</span> k) {
+    PriorityQueue&lt;Integer&gt; h = <span class="tok-kw">new</span> PriorityQueue&lt;&gt;();
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> n : nums) {
+        h.offer(n);
+        <span class="tok-kw">if</span> (h.size() &gt; k) h.poll();
+    }
+    <span class="tok-kw">return</span> h.peek();
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/kth-largest-element-in-an-array/" target="_blank" rel="noopener"><span class="pc-num">№ 215</span><span class="pc-title">Kth Largest Element</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/last-stone-weight/" target="_blank" rel="noopener"><span class="pc-num">№ 1046</span><span class="pc-title">Last Stone Weight</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/k-closest-points-to-origin/" target="_blank" rel="noopener"><span class="pc-num">№ 973</span><span class="pc-title">K Closest Points to Origin</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank" rel="noopener"><span class="pc-num">№ 23</span><span class="pc-title">Merge k Sorted Lists</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/task-scheduler/" target="_blank" rel="noopener"><span class="pc-num">№ 621</span><span class="pc-title">Task Scheduler</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/find-median-from-data-stream/" target="_blank" rel="noopener"><span class="pc-num">№ 295</span><span class="pc-title">Find Median from Data Stream</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BINARY TREE ============ -->
+<section class="topic" id="tree">
+  <div class="section-number">§ 10 · Binary Tree</div>
+  <h2 class="topic-title">Binary Tree</h2>
+  <p class="dropcap">A binary tree is a family tree where each person has at most two children. There's one root at the top, and every node has a left and a right (either or both may be empty). Trees model anything hierarchical: file systems, decision processes, the DOM, expression evaluation, organization charts.</p>
+
+  <div class="analogy">
+    Picture a tournament bracket. The final winner sits at the root. Below them, two finalists. Below them, four semi-finalists, and so on. To walk from the root to any leaf, you make a sequence of left/right choices. To <em>visit every player</em>, you have a few principled orders—we call those traversals.
+  </div>
+
+  <h3 class="subhead">The node</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">class</span> <span class="tok-typ">TreeNode</span> {
+    <span class="tok-typ">int</span> val;
+    <span class="tok-typ">TreeNode</span> left, right;
+    <span class="tok-typ">TreeNode</span>(<span class="tok-typ">int</span> val) { <span class="tok-kw">this</span>.val = val; }
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">The three depth-first traversals</h3>
+  <p>The difference is <em>when you visit the current node</em> relative to its children:</p>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Pre-order: ROOT → LEFT → RIGHT (good for cloning a tree)</span>
+<span class="tok-kw">void</span> <span class="tok-fn">pre</span>(<span class="tok-typ">TreeNode</span> n) {
+    <span class="tok-kw">if</span> (n == <span class="tok-kw">null</span>) <span class="tok-kw">return</span>;
+    visit(n);
+    pre(n.left);
+    pre(n.right);
+}
+
+<span class="tok-com">// In-order: LEFT → ROOT → RIGHT (sorted output on a BST)</span>
+<span class="tok-kw">void</span> <span class="tok-fn">in</span>(<span class="tok-typ">TreeNode</span> n) {
+    <span class="tok-kw">if</span> (n == <span class="tok-kw">null</span>) <span class="tok-kw">return</span>;
+    in(n.left);
+    visit(n);
+    in(n.right);
+}
+
+<span class="tok-com">// Post-order: LEFT → RIGHT → ROOT (good for deletion, bottom-up DP)</span>
+<span class="tok-kw">void</span> <span class="tok-fn">post</span>(<span class="tok-typ">TreeNode</span> n) {
+    <span class="tok-kw">if</span> (n == <span class="tok-kw">null</span>) <span class="tok-kw">return</span>;
+    post(n.left);
+    post(n.right);
+    visit(n);
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Level-order traversal (BFS)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Visit row by row — uses a queue</span>
+<span class="tok-kw">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="tok-fn">levelOrder</span>(<span class="tok-typ">TreeNode</span> root) {
+    List&lt;List&lt;Integer&gt;&gt; res = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+    <span class="tok-kw">if</span> (root == <span class="tok-kw">null</span>) <span class="tok-kw">return</span> res;
+    Queue&lt;<span class="tok-typ">TreeNode</span>&gt; q = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+    q.offer(root);
+    <span class="tok-kw">while</span> (!q.isEmpty()) {
+        <span class="tok-typ">int</span> size = q.size();
+        List&lt;Integer&gt; level = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; size; i++) {
+            <span class="tok-typ">TreeNode</span> n = q.poll();
+            level.add(n.val);
+            <span class="tok-kw">if</span> (n.left  != <span class="tok-kw">null</span>) q.offer(n.left);
+            <span class="tok-kw">if</span> (n.right != <span class="tok-kw">null</span>) q.offer(n.right);
+        }
+        res.add(level);
+    }
+    <span class="tok-kw">return</span> res;
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Tree problems = recursion</div>
+    Almost every tree problem solves with a recursive function that handles three things: (1) the base case (usually <code class="inline">if (node == null)</code>), (2) what to do with the current node, and (3) recursive calls to left and right. If you can name those three pieces, you can solve it.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/maximum-depth-of-binary-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 104</span><span class="pc-title">Maximum Depth of Binary Tree</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/invert-binary-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 226</span><span class="pc-title">Invert Binary Tree</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/same-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 100</span><span class="pc-title">Same Tree</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/symmetric-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 101</span><span class="pc-title">Symmetric Tree</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener"><span class="pc-num">№ 102</span><span class="pc-title">Level Order Traversal</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/diameter-of-binary-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 543</span><span class="pc-title">Diameter of Binary Tree</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 236</span><span class="pc-title">Lowest Common Ancestor</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/binary-tree-maximum-path-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 124</span><span class="pc-title">Binary Tree Maximum Path Sum</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BST ============ -->
+<section class="topic" id="bst">
+  <div class="section-number">§ 11 · Binary Search Tree</div>
+  <h2 class="topic-title">Binary Search Tree</h2>
+  <p class="dropcap">A BST is a binary tree with one extra rule: <strong>every node's left subtree contains smaller values, and the right subtree contains larger values.</strong> That rule turns every search into a halving game—just like binary search, but on a tree. As long as the tree stays balanced, every operation is O(log n).</p>
+
+  <div class="analogy">
+    Think of the way you might find a name in a thick phonebook: open to the middle, decide if your name is in the left half or right half, and keep narrowing. A BST encodes that decision tree directly. Start at the root, go left or right based on a comparison, and you're at your target in log n steps.
+  </div>
+
+  <h3 class="subhead">The killer property: in-order = sorted</h3>
+  <p>If you in-order traverse a BST (left → root → right), you get the elements in sorted order. Use this. Many BST problems boil down to "run in-order and check something."</p>
+
+  <h3 class="subhead">Search & insert</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">TreeNode</span> <span class="tok-fn">search</span>(<span class="tok-typ">TreeNode</span> root, <span class="tok-typ">int</span> target) {
+    <span class="tok-kw">while</span> (root != <span class="tok-kw">null</span> &amp;&amp; root.val != target) {
+        root = target &lt; root.val ? root.left : root.right;
+    }
+    <span class="tok-kw">return</span> root;
+}
+
+<span class="tok-kw">public</span> <span class="tok-typ">TreeNode</span> <span class="tok-fn">insert</span>(<span class="tok-typ">TreeNode</span> root, <span class="tok-typ">int</span> val) {
+    <span class="tok-kw">if</span> (root == <span class="tok-kw">null</span>) <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-typ">TreeNode</span>(val);
+    <span class="tok-kw">if</span> (val &lt; root.val) root.left  = insert(root.left,  val);
+    <span class="tok-kw">else</span>                root.right = insert(root.right, val);
+    <span class="tok-kw">return</span> root;
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Balance matters</div>
+    A BST stays O(log n) only if it's <em>balanced</em>. Insert sorted values into a plain BST and you'll get a glorified linked list — back to O(n). In production, Java's <code class="inline">TreeMap</code> and <code class="inline">TreeSet</code> use a Red-Black tree, which self-balances. For interviews, you rarely implement balancing yourself.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/search-in-a-binary-search-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 700</span><span class="pc-title">Search in a BST</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/validate-binary-search-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 98</span><span class="pc-title">Validate BST</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/kth-smallest-element-in-a-bst/" target="_blank" rel="noopener"><span class="pc-num">№ 230</span><span class="pc-title">Kth Smallest in BST</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 235</span><span class="pc-title">LCA of a BST</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 108</span><span class="pc-title">Sorted Array to BST</span><span class="pc-diff easy">Easy</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRIE ============ -->
+<section class="topic" id="trie">
+  <div class="section-number">§ 12 · Trie</div>
+  <h2 class="topic-title">Trie (Prefix Tree)</h2>
+  <p class="dropcap">A trie is what powers your phone's autocomplete. It's a tree where each edge is a letter, and walking from the root to a node spells out a prefix. If thousands of words start with "pre"—precision, prefix, prepare, prevent—they all share the same "p → r → e" path through the tree. That shared path is what makes prefix queries blazing fast.</p>
+
+  <div class="analogy">
+    Imagine a dictionary organized as a giant flowchart. To look up <em>"cat"</em>, you go down branch C, then A, then T. If you stop at T and there's a little marker that says "word ends here," then <em>"cat"</em> is in the dictionary. The shared early letters of <em>"car"</em> and <em>"cat"</em> live in the same branch—no duplication.
+  </div>
+
+  <h3 class="subhead">When to reach for it</h3>
+  <ul class="list">
+    <li>Autocomplete / type-ahead.</li>
+    <li>Prefix matching ("how many words start with 'pre'?").</li>
+    <li>Spell-check, word games like Boggle.</li>
+    <li>IP routing tables (longest prefix match).</li>
+  </ul>
+
+  <h3 class="subhead">Java implementation</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">class</span> <span class="tok-typ">Trie</span> {
+    <span class="tok-kw">private</span> <span class="tok-typ">Trie</span>[] children = <span class="tok-kw">new</span> <span class="tok-typ">Trie</span>[<span class="tok-num">26</span>];
+    <span class="tok-kw">private</span> <span class="tok-kw">boolean</span> isEnd = <span class="tok-kw">false</span>;
+
+    <span class="tok-kw">public</span> <span class="tok-kw">void</span> <span class="tok-fn">insert</span>(String word) {
+        <span class="tok-typ">Trie</span> node = <span class="tok-kw">this</span>;
+        <span class="tok-kw">for</span> (<span class="tok-typ">char</span> c : word.toCharArray()) {
+            <span class="tok-typ">int</span> i = c - <span class="tok-str">'a'</span>;
+            <span class="tok-kw">if</span> (node.children[i] == <span class="tok-kw">null</span>)
+                node.children[i] = <span class="tok-kw">new</span> <span class="tok-typ">Trie</span>();
+            node = node.children[i];
+        }
+        node.isEnd = <span class="tok-kw">true</span>;
+    }
+
+    <span class="tok-kw">public</span> <span class="tok-kw">boolean</span> <span class="tok-fn">search</span>(String word) {
+        <span class="tok-typ">Trie</span> node = find(word);
+        <span class="tok-kw">return</span> node != <span class="tok-kw">null</span> &amp;&amp; node.isEnd;
+    }
+
+    <span class="tok-kw">public</span> <span class="tok-kw">boolean</span> <span class="tok-fn">startsWith</span>(String prefix) {
+        <span class="tok-kw">return</span> find(prefix) != <span class="tok-kw">null</span>;
+    }
+
+    <span class="tok-kw">private</span> <span class="tok-typ">Trie</span> <span class="tok-fn">find</span>(String s) {
+        <span class="tok-typ">Trie</span> node = <span class="tok-kw">this</span>;
+        <span class="tok-kw">for</span> (<span class="tok-typ">char</span> c : s.toCharArray()) {
+            node = node.children[c - <span class="tok-str">'a'</span>];
+            <span class="tok-kw">if</span> (node == <span class="tok-kw">null</span>) <span class="tok-kw">return</span> <span class="tok-kw">null</span>;
+        }
+        <span class="tok-kw">return</span> node;
+    }
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/implement-trie-prefix-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 208</span><span class="pc-title">Implement Trie</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/design-add-and-search-words-data-structure/" target="_blank" rel="noopener"><span class="pc-num">№ 211</span><span class="pc-title">Add & Search Word</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/word-search-ii/" target="_blank" rel="noopener"><span class="pc-num">№ 212</span><span class="pc-title">Word Search II</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/replace-words/" target="_blank" rel="noopener"><span class="pc-num">№ 648</span><span class="pc-title">Replace Words</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRAPH ============ -->
+<section class="topic" id="graph">
+  <div class="section-number">§ 13 · Graph</div>
+  <h2 class="topic-title">Graph</h2>
+  <p class="dropcap">A graph is a tree that gave up on having a single root and let nodes connect to anyone. Cities and the roads between them, users and their friendships, web pages and their links—anything where things connect to other things is a graph. Trees are just graphs with rules; once you can do graphs, trees come for free.</p>
+
+  <div class="analogy">
+    Imagine a city. The intersections are <em>nodes</em>. The streets are <em>edges</em>. Some streets are one-way (directed graph); most go both ways (undirected). Some streets are toll roads with different prices (weighted graph). Asking "how do I get from intersection A to intersection B with minimum tolls?" is a shortest-path problem.
+  </div>
+
+  <h3 class="subhead">Two ways to store a graph</h3>
+  <p><strong>Adjacency list</strong> — for each node, a list of its neighbors. Compact when edges are sparse. This is what you'll use 95% of the time.</p>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Graph with n nodes (numbered 0 .. n-1)</span>
+List&lt;List&lt;Integer&gt;&gt; graph = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++) graph.add(<span class="tok-kw">new</span> ArrayList&lt;&gt;());
+
+<span class="tok-com">// edges: int[][] edges where edges[i] = {u, v}</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span>[] e : edges) {
+    graph.get(e[<span class="tok-num">0</span>]).add(e[<span class="tok-num">1</span>]);
+    graph.get(e[<span class="tok-num">1</span>]).add(e[<span class="tok-num">0</span>]);  <span class="tok-com">// omit this for directed graph</span>
+}</code></pre>
+  </div>
+
+  <p><strong>Adjacency matrix</strong> — an n × n boolean grid. Wastes space for sparse graphs but lets you ask "is there an edge from i to j?" in O(1).</p>
+
+  <h3 class="subhead">BFS — shortest path in an unweighted graph</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">shortestPath</span>(List&lt;List&lt;Integer&gt;&gt; graph, <span class="tok-typ">int</span> src, <span class="tok-typ">int</span> dst) {
+    Queue&lt;Integer&gt; q = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+    <span class="tok-kw">boolean</span>[] seen = <span class="tok-kw">new</span> <span class="tok-kw">boolean</span>[graph.size()];
+    q.offer(src);
+    seen[src] = <span class="tok-kw">true</span>;
+    <span class="tok-typ">int</span> dist = <span class="tok-num">0</span>;
+    <span class="tok-kw">while</span> (!q.isEmpty()) {
+        <span class="tok-typ">int</span> size = q.size();
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; size; i++) {
+            <span class="tok-typ">int</span> node = q.poll();
+            <span class="tok-kw">if</span> (node == dst) <span class="tok-kw">return</span> dist;
+            <span class="tok-kw">for</span> (<span class="tok-typ">int</span> nb : graph.get(node)) {
+                <span class="tok-kw">if</span> (!seen[nb]) {
+                    seen[nb] = <span class="tok-kw">true</span>;
+                    q.offer(nb);
+                }
+            }
+        }
+        dist++;
+    }
+    <span class="tok-kw">return</span> -<span class="tok-num">1</span>;
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">DFS — exploring all reachable</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">void</span> <span class="tok-fn">dfs</span>(<span class="tok-typ">int</span> node, List&lt;List&lt;Integer&gt;&gt; graph, <span class="tok-kw">boolean</span>[] seen) {
+    <span class="tok-kw">if</span> (seen[node]) <span class="tok-kw">return</span>;
+    seen[node] = <span class="tok-kw">true</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> nb : graph.get(node)) dfs(nb, graph, seen);
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Always carry a "seen" set</div>
+    Graphs can have cycles. Without a <code class="inline">visited</code> array or set, your BFS/DFS will loop forever. Mark a node as seen <em>when you enqueue it</em>, not when you dequeue it—otherwise you'll add duplicates to the queue.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/number-of-islands/" target="_blank" rel="noopener"><span class="pc-num">№ 200</span><span class="pc-title">Number of Islands</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/clone-graph/" target="_blank" rel="noopener"><span class="pc-num">№ 133</span><span class="pc-title">Clone Graph</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/rotting-oranges/" target="_blank" rel="noopener"><span class="pc-num">№ 994</span><span class="pc-title">Rotting Oranges</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/course-schedule/" target="_blank" rel="noopener"><span class="pc-num">№ 207</span><span class="pc-title">Course Schedule</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/pacific-atlantic-water-flow/" target="_blank" rel="noopener"><span class="pc-num">№ 417</span><span class="pc-title">Pacific Atlantic Water Flow</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="noopener"><span class="pc-num">№ 127</span><span class="pc-title">Word Ladder</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNION-FIND ============ -->
+<section class="topic" id="unionfind">
+  <div class="section-number">§ 14 · Union-Find</div>
+  <h2 class="topic-title">Union-Find (Disjoint Set)</h2>
+  <p class="dropcap">Union-Find answers one question really fast: <strong>"are these two things in the same group?"</strong> Start with everyone in their own group. As you process connections, merge groups. At any moment you can ask "are X and Y connected?" in essentially O(1). It's the secret weapon behind Kruskal's MST, dynamic connectivity, and a surprising number of LeetCode hards.</p>
+
+  <div class="analogy">
+    Picture a wedding seating chart with name cards in piles. Each pile is a "family group." When two families discover they're related (someone shouts "we're cousins!"), you slide the two piles together into one. Want to check if Anjali and Karan are family? Just see which pile each is sitting in—if it's the same pile, yes.
+  </div>
+
+  <h3 class="subhead">Java implementation</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">class</span> <span class="tok-typ">UnionFind</span> {
+    <span class="tok-typ">int</span>[] parent, rank;
+
+    <span class="tok-typ">UnionFind</span>(<span class="tok-typ">int</span> n) {
+        parent = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+        rank   = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++) parent[i] = i;
+    }
+
+    <span class="tok-com">// Find with PATH COMPRESSION</span>
+    <span class="tok-typ">int</span> <span class="tok-fn">find</span>(<span class="tok-typ">int</span> x) {
+        <span class="tok-kw">if</span> (parent[x] != x) parent[x] = find(parent[x]);
+        <span class="tok-kw">return</span> parent[x];
+    }
+
+    <span class="tok-com">// Union by RANK — keeps tree shallow</span>
+    <span class="tok-kw">boolean</span> <span class="tok-fn">union</span>(<span class="tok-typ">int</span> x, <span class="tok-typ">int</span> y) {
+        <span class="tok-typ">int</span> rx = find(x), ry = find(y);
+        <span class="tok-kw">if</span> (rx == ry) <span class="tok-kw">return</span> <span class="tok-kw">false</span>;            <span class="tok-com">// already same group</span>
+        <span class="tok-kw">if</span> (rank[rx] &lt; rank[ry])      parent[rx] = ry;
+        <span class="tok-kw">else</span> <span class="tok-kw">if</span> (rank[rx] &gt; rank[ry]) parent[ry] = rx;
+        <span class="tok-kw">else</span> { parent[ry] = rx; rank[rx]++; }
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
+    }
+}</code></pre>
+  </div>
+
+  <p>With path compression and union by rank, both operations run in nearly O(1) — technically O(α(n)) where α is the inverse Ackermann function, which is at most 4 for any input you'll ever encounter.</p>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/number-of-provinces/" target="_blank" rel="noopener"><span class="pc-num">№ 547</span><span class="pc-title">Number of Provinces</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/graph-valid-tree/" target="_blank" rel="noopener"><span class="pc-num">№ 261</span><span class="pc-title">Graph Valid Tree</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/redundant-connection/" target="_blank" rel="noopener"><span class="pc-num">№ 684</span><span class="pc-title">Redundant Connection</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/accounts-merge/" target="_blank" rel="noopener"><span class="pc-num">№ 721</span><span class="pc-title">Accounts Merge</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/" target="_blank" rel="noopener"><span class="pc-num">№ 323</span><span class="pc-title">Connected Components</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="ornament">❦</div>
+<p style="font-size:1.1rem;font-family:'Fraunces',serif;font-style:italic;color:var(--ink-soft);text-align:center;margin-top:2rem;">
+  You now have the containers. Next, the patterns that operate on them.
+</p>
+<p style="text-align:center;margin-top:1.5rem;">
+  <a href="algorithms.html" class="path-cta" style="text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px;">Continue to Algorithms</a>
+</p>
+
+</article>
+</div>
+
+<footer>
+  The DSA Codex · Chapter II · <em>structures shape thought</em>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

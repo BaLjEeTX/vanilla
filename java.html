@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Java Toolkit — The DSA Codex</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html" class="brand">The DSA Codex</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Complexity</a></li>
+    <li><a href="data-structures.html">Data Structures</a></li>
+    <li><a href="algorithms.html">Algorithms</a></li>
+    <li><a href="java.html" class="active">Java Toolkit</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">Chapter IV · The right Java, nothing more</div>
+  <h1>Java <em>Toolkit</em></h1>
+  <p class="hero-sub">Java is a big language. You don't need most of it. This is the exact subset that gets used in 99% of LeetCode solutions—paired with the problem patterns that ask for it.</p>
+</header>
+
+<section class="manifesto">
+  <p>
+    Don't learn Java front-to-back and <em>then</em> learn DSA. Learn the small slice of Java each DSA pattern needs, when it needs it. By the time you finish this page, that slice <em>is</em> your working Java.
+  </p>
+</section>
+
+<div class="layout">
+
+<aside class="toc">
+  <div class="toc-title">Chapter IV · Topics</div>
+  <ol>
+    <li><a href="#essentials">Java in 5 minutes</a></li>
+    <li><a href="#io">LeetCode signatures & I/O</a></li>
+    <li><a href="#primitives">Primitives vs wrappers</a></li>
+    <li><a href="#collections">Collections cheat-sheet</a></li>
+    <li><a href="#comparator">Comparator & sorting</a></li>
+    <li><a href="#strings">Strings & StringBuilder</a></li>
+    <li><a href="#generics">Generics</a></li>
+    <li><a href="#lambdas">Lambdas & functional</a></li>
+    <li><a href="#math">Math & numeric edges</a></li>
+    <li><a href="#pitfalls">Top 10 pitfalls</a></li>
+    <li><a href="#snippets">The snippet vault</a></li>
+  </ol>
+</aside>
+
+<article class="content">
+
+<!-- ============ ESSENTIALS ============ -->
+<section class="topic" id="essentials">
+  <div class="section-number">§ 1 · Essentials</div>
+  <h2 class="topic-title">Java in five minutes</h2>
+  <p class="dropcap">Java is a statically-typed, object-oriented language. <em>Statically-typed</em> means every variable's type is fixed at compile time—you can't suddenly assign a String to a variable holding an int. <em>Object-oriented</em> means code is organised into classes. For DSA you'll rarely build elaborate class hierarchies; you'll mostly use one <code class="inline">Solution</code> class with a few methods, exactly like LeetCode's editor expects.</p>
+
+  <h3 class="subhead">The minimum runnable program</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-kw">class</span> <span class="tok-typ">Main</span> {
+    <span class="tok-kw">public</span> <span class="tok-kw">static</span> <span class="tok-kw">void</span> <span class="tok-fn">main</span>(String[] args) {
+        System.out.println(<span class="tok-str">"Hello, DSA"</span>);
+    }
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Variables, conditionals, loops</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span> x = <span class="tok-num">10</span>;
+<span class="tok-typ">double</span> pi = <span class="tok-num">3.14</span>;
+<span class="tok-typ">boolean</span> flag = <span class="tok-kw">true</span>;
+String name = <span class="tok-str">"riya"</span>;
+
+<span class="tok-kw">if</span> (x &gt; <span class="tok-num">5</span>)        { ... }
+<span class="tok-kw">else</span> <span class="tok-kw">if</span> (x == <span class="tok-num">5</span>) { ... }
+<span class="tok-kw">else</span>              { ... }
+
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">10</span>; i++) { ... }
+<span class="tok-kw">while</span> (x &gt; <span class="tok-num">0</span>) { x--; }
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> v : arr) { ... }        <span class="tok-com">// enhanced-for</span>
+
+<span class="tok-com">// Ternary — handy for one-liners</span>
+<span class="tok-typ">int</span> max = a &gt; b ? a : b;</code></pre>
+  </div>
+</section>
+
+<!-- ============ I/O ============ -->
+<section class="topic" id="io">
+  <div class="section-number">§ 2 · LeetCode I/O</div>
+  <h2 class="topic-title">LeetCode method signatures</h2>
+  <p>On LeetCode, you fill in a <em>method body</em>. You don't read input or write output. The platform calls your method and grades the return value. Internalize these shapes:</p>
+
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">class</span> <span class="tok-typ">Solution</span> {
+    <span class="tok-com">// "Two Sum"</span>
+    <span class="tok-kw">public</span> <span class="tok-typ">int</span>[] <span class="tok-fn">twoSum</span>(<span class="tok-typ">int</span>[] nums, <span class="tok-typ">int</span> target) { ... }
+
+    <span class="tok-com">// "Level Order Traversal"</span>
+    <span class="tok-kw">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="tok-fn">levelOrder</span>(<span class="tok-typ">TreeNode</span> root) { ... }
+
+    <span class="tok-com">// "Valid Parentheses"</span>
+    <span class="tok-kw">public</span> <span class="tok-kw">boolean</span> <span class="tok-fn">isValid</span>(String s) { ... }
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Local testing (when you do need stdin)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">import</span> java.util.Scanner;
+
+<span class="tok-kw">public</span> <span class="tok-kw">class</span> <span class="tok-typ">Main</span> {
+    <span class="tok-kw">public</span> <span class="tok-kw">static</span> <span class="tok-kw">void</span> <span class="tok-fn">main</span>(String[] args) {
+        Scanner sc = <span class="tok-kw">new</span> Scanner(System.in);
+        <span class="tok-typ">int</span> n = sc.nextInt();
+        <span class="tok-typ">int</span>[] a = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++) a[i] = sc.nextInt();
+        System.out.println(Arrays.toString(a));
+    }
+}</code></pre>
+  </div>
+</section>
+
+<!-- ============ PRIMITIVES ============ -->
+<section class="topic" id="primitives">
+  <div class="section-number">§ 3 · Primitives vs wrappers</div>
+  <h2 class="topic-title">Primitives vs wrappers</h2>
+  <p class="dropcap">Java has two kinds of types. <strong>Primitives</strong> (<code class="inline">int</code>, <code class="inline">long</code>, <code class="inline">double</code>, <code class="inline">boolean</code>, <code class="inline">char</code>) are raw values stored directly. <strong>Wrappers</strong> (<code class="inline">Integer</code>, <code class="inline">Long</code>, <code class="inline">Double</code>, <code class="inline">Boolean</code>, <code class="inline">Character</code>) are objects that wrap a primitive. The annoying rule: <em>collections only hold objects</em>, so a list of integers is <code class="inline">List&lt;Integer&gt;</code>, not <code class="inline">List&lt;int&gt;</code>.</p>
+
+  <table class="complexity">
+    <thead><tr><th>Primitive</th><th>Bits</th><th>Range</th><th>Wrapper</th></tr></thead>
+    <tbody>
+      <tr><td><code class="inline">int</code></td><td>32</td><td>±2.1 × 10⁹</td><td>Integer</td></tr>
+      <tr><td><code class="inline">long</code></td><td>64</td><td>±9.2 × 10¹⁸</td><td>Long</td></tr>
+      <tr><td><code class="inline">double</code></td><td>64</td><td>~15 decimal digits</td><td>Double</td></tr>
+      <tr><td><code class="inline">boolean</code></td><td>1 (logical)</td><td>true / false</td><td>Boolean</td></tr>
+      <tr><td><code class="inline">char</code></td><td>16</td><td>Unicode code unit</td><td>Character</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-title">Overflow watch</div>
+    Many DSA problems whisper "the sum may exceed 32-bit range." If the inputs are near 10⁹ and you're <em>adding</em> or <em>multiplying</em>, use <code class="inline">long</code>. A multiplication of two ints overflows silently—cast one to <code class="inline">long</code> first: <code class="inline">(long) a * b</code>.
+  </div>
+
+  <h3 class="subhead">Autoboxing and the == trap</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>Integer a = <span class="tok-num">128</span>, b = <span class="tok-num">128</span>;
+System.out.println(a == b);          <span class="tok-com">// false — reference compare</span>
+System.out.println(a.equals(b));     <span class="tok-com">// true  — value compare
+
+// For wrapper objects, always use .equals()
+// For primitives, == is the value comparison.</span></code></pre>
+  </div>
+</section>
+
+<!-- ============ COLLECTIONS ============ -->
+<section class="topic" id="collections">
+  <div class="section-number">§ 4 · Collections</div>
+  <h2 class="topic-title">The Collections cheat-sheet</h2>
+  <p>This is the table. Bookmark it. Internalize the imports.</p>
+
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">import</span> java.util.*;       <span class="tok-com">// imports ALL of the below — fine on LeetCode</span>
+
+<span class="tok-com">// Lists</span>
+List&lt;Integer&gt; al = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+List&lt;Integer&gt; ll = <span class="tok-kw">new</span> LinkedList&lt;&gt;();
+
+<span class="tok-com">// Sets</span>
+Set&lt;Integer&gt; hs = <span class="tok-kw">new</span> HashSet&lt;&gt;();        <span class="tok-com">// unordered, O(1) ops</span>
+Set&lt;Integer&gt; ts = <span class="tok-kw">new</span> TreeSet&lt;&gt;();        <span class="tok-com">// sorted, O(log n)</span>
+Set&lt;Integer&gt; lhs = <span class="tok-kw">new</span> LinkedHashSet&lt;&gt;();   <span class="tok-com">// insertion-order</span>
+
+<span class="tok-com">// Maps</span>
+Map&lt;String,Integer&gt; hm  = <span class="tok-kw">new</span> HashMap&lt;&gt;();
+Map&lt;String,Integer&gt; tm  = <span class="tok-kw">new</span> TreeMap&lt;&gt;();
+Map&lt;String,Integer&gt; lhm = <span class="tok-kw">new</span> LinkedHashMap&lt;&gt;();
+
+<span class="tok-com">// Queue / Stack / Deque — prefer ArrayDeque</span>
+Queue&lt;Integer&gt; q     = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+Deque&lt;Integer&gt; stack = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+Deque&lt;Integer&gt; deque = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+
+<span class="tok-com">// Heap</span>
+PriorityQueue&lt;Integer&gt; pq    = <span class="tok-kw">new</span> PriorityQueue&lt;&gt;();
+PriorityQueue&lt;Integer&gt; maxPq = <span class="tok-kw">new</span> PriorityQueue&lt;&gt;(Comparator.reverseOrder());</code></pre>
+  </div>
+
+  <h3 class="subhead">The methods you'll use 90% of the time</h3>
+  <table class="complexity">
+    <thead><tr><th>Op</th><th>List</th><th>Set</th><th>Map</th><th>Queue/Deque</th></tr></thead>
+    <tbody>
+      <tr><td>add</td><td><code class="inline">add(x)</code></td><td><code class="inline">add(x)</code></td><td><code class="inline">put(k,v)</code></td><td><code class="inline">offer(x)</code></td></tr>
+      <tr><td>check</td><td><code class="inline">contains</code></td><td><code class="inline">contains</code></td><td><code class="inline">containsKey</code></td><td><code class="inline">contains</code></td></tr>
+      <tr><td>fetch</td><td><code class="inline">get(i)</code></td><td>—</td><td><code class="inline">get(k)</code></td><td><code class="inline">peek</code></td></tr>
+      <tr><td>remove</td><td><code class="inline">remove(i)</code></td><td><code class="inline">remove(x)</code></td><td><code class="inline">remove(k)</code></td><td><code class="inline">poll</code></td></tr>
+      <tr><td>size</td><td><code class="inline">size()</code></td><td><code class="inline">size()</code></td><td><code class="inline">size()</code></td><td><code class="inline">size()</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subhead">Iterating a map — the patterns</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Keys only</span>
+<span class="tok-kw">for</span> (String k : map.keySet()) { ... }
+
+<span class="tok-com">// Values only</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> v : map.values()) { ... }
+
+<span class="tok-com">// Both — preferred</span>
+<span class="tok-kw">for</span> (Map.Entry&lt;String, Integer&gt; e : map.entrySet()) {
+    String k = e.getKey();
+    <span class="tok-typ">int</span>    v = e.getValue();
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Converting between forms</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// int[] → List&lt;Integer&gt;</span>
+List&lt;Integer&gt; list = Arrays.stream(arr).boxed().collect(Collectors.toList());
+
+<span class="tok-com">// List&lt;Integer&gt; → int[]</span>
+<span class="tok-typ">int</span>[] back = list.stream().mapToInt(Integer::intValue).toArray();
+
+<span class="tok-com">// Array → List view (FIXED-SIZE, do not call add/remove)</span>
+List&lt;String&gt; view = Arrays.asList(<span class="tok-str">"a"</span>, <span class="tok-str">"b"</span>);
+
+<span class="tok-com">// Set → List</span>
+List&lt;Integer&gt; fromSet = <span class="tok-kw">new</span> ArrayList&lt;&gt;(set);
+
+<span class="tok-com">// String → char[]</span>
+<span class="tok-typ">char</span>[] chars = s.toCharArray();
+
+<span class="tok-com">// char[] → String</span>
+String back = <span class="tok-kw">new</span> String(chars);</code></pre>
+  </div>
+</section>
+
+<!-- ============ COMPARATOR ============ -->
+<section class="topic" id="comparator">
+  <div class="section-number">§ 5 · Comparator</div>
+  <h2 class="topic-title">Comparator & custom sorting</h2>
+  <p class="dropcap">A Comparator is just a tiny function: "given a and b, which one comes first?" Return a negative number to put a before b, positive for after, zero for equal. Modern Java lets you write this as a one-line lambda. This is the single most useful Java idiom for DSA—every interview problem with custom ordering uses it.</p>
+
+  <h3 class="subhead">Basics</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Ascending — the default</span>
+Arrays.sort(arr);
+
+<span class="tok-com">// Descending — Integer[] not int[]</span>
+Arrays.sort(boxedArr, (a, b) -&gt; b - a);
+
+<span class="tok-com">// Safer for big numbers (avoids overflow)</span>
+Arrays.sort(boxedArr, (a, b) -&gt; Integer.compare(b, a));
+
+<span class="tok-com">// Sort objects by field</span>
+Arrays.sort(intervals, (a, b) -&gt; a[<span class="tok-num">0</span>] - b[<span class="tok-num">0</span>]);
+
+<span class="tok-com">// Multi-key — by first, ties broken by second</span>
+Arrays.sort(intervals, (a, b) -&gt;
+    a[<span class="tok-num">0</span>] != b[<span class="tok-num">0</span>] ? a[<span class="tok-num">0</span>] - b[<span class="tok-num">0</span>] : a[<span class="tok-num">1</span>] - b[<span class="tok-num">1</span>]);</code></pre>
+  </div>
+
+  <h3 class="subhead">Comparator.comparing — the readable form</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Sort meetings by start, then by end</span>
+Arrays.sort(meetings, Comparator
+    .comparingInt((<span class="tok-typ">int</span>[] m) -&gt; m[<span class="tok-num">0</span>])
+    .thenComparingInt(m -&gt; m[<span class="tok-num">1</span>]));
+
+<span class="tok-com">// Reverse easily</span>
+list.sort(Comparator.reverseOrder());
+
+<span class="tok-com">// Custom class</span>
+people.sort(Comparator.comparing(Person::getAge).reversed());</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The <code class="inline">b - a</code> overflow trap</div>
+    <code class="inline">(a, b) -&gt; b - a</code> looks elegant but breaks when <code class="inline">b</code> is very negative and <code class="inline">a</code> is very positive — the subtraction overflows. For competitive-style problems with wide ranges, always use <code class="inline">Integer.compare(b, a)</code> or <code class="inline">Long.compare(...)</code>.
+  </div>
+</section>
+
+<!-- ============ STRINGS ============ -->
+<section class="topic" id="strings">
+  <div class="section-number">§ 6 · Strings & StringBuilder</div>
+  <h2 class="topic-title">Strings & StringBuilder</h2>
+  <p class="dropcap">Strings in Java are immutable. Every "edit" creates a new String. Concatenating in a loop is therefore O(n²) — each <code class="inline">+=</code> copies the whole string. Use <code class="inline">StringBuilder</code> for any string built character-by-character. This single change can drop "Time Limit Exceeded" to "Accepted."</p>
+
+  <h3 class="subhead">String — the methods that matter</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>String s = <span class="tok-str">"hello world"</span>;
+
+s.length();                  <span class="tok-com">// 11</span>
+s.charAt(<span class="tok-num">0</span>);                <span class="tok-com">// 'h'</span>
+s.substring(<span class="tok-num">0</span>, <span class="tok-num">5</span>);          <span class="tok-com">// "hello" — [start, end)</span>
+s.indexOf(<span class="tok-str">"world"</span>);          <span class="tok-com">// 6, or -1</span>
+s.contains(<span class="tok-str">"ell"</span>);           <span class="tok-com">// true</span>
+s.startsWith(<span class="tok-str">"he"</span>);          <span class="tok-com">// true</span>
+s.endsWith(<span class="tok-str">"ld"</span>);            <span class="tok-com">// true</span>
+s.toLowerCase();
+s.toUpperCase();
+s.trim();                    <span class="tok-com">// strip leading/trailing whitespace</span>
+s.replace(<span class="tok-str">'l'</span>, <span class="tok-str">'L'</span>);        <span class="tok-com">// "heLLo worLd"</span>
+s.split(<span class="tok-str">" "</span>);                <span class="tok-com">// ["hello", "world"]</span>
+s.toCharArray();
+s.equals(<span class="tok-str">"hello world"</span>);     <span class="tok-com">// content equality</span>
+String.valueOf(<span class="tok-num">123</span>);          <span class="tok-com">// int → "123"</span>
+Integer.parseInt(<span class="tok-str">"123"</span>);     <span class="tok-com">// "123" → 123</span></code></pre>
+  </div>
+
+  <h3 class="subhead">StringBuilder — the workhorse</h3>
+  <div class="code-block" data-lang="java">
+<pre><code>StringBuilder sb = <span class="tok-kw">new</span> StringBuilder();
+
+sb.append(<span class="tok-str">"hi"</span>);
+sb.append(<span class="tok-num">42</span>);
+sb.append(<span class="tok-str">'!'</span>);
+sb.insert(<span class="tok-num">0</span>, <span class="tok-str">">>>"</span>);              <span class="tok-com">// insert at index</span>
+sb.deleteCharAt(<span class="tok-num">1</span>);
+sb.reverse();                       <span class="tok-com">// in-place reverse</span>
+sb.length();
+sb.charAt(<span class="tok-num">2</span>);
+sb.setCharAt(<span class="tok-num">2</span>, <span class="tok-str">'X'</span>);
+String result = sb.toString();</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">When does StringBuilder matter?</div>
+    Any time you're <em>accumulating</em> characters in a loop — building a result string in backtracking, joining tokens, constructing a reversed string. For one-off concatenations of two or three strings, plain <code class="inline">+</code> is fine; the compiler optimises it.
+  </div>
+</section>
+
+<!-- ============ GENERICS ============ -->
+<section class="topic" id="generics">
+  <div class="section-number">§ 7 · Generics</div>
+  <h2 class="topic-title">Generics</h2>
+  <p class="dropcap">Generics are why you write <code class="inline">List&lt;Integer&gt;</code> instead of just <code class="inline">List</code>. The angle brackets tell Java what type lives inside the collection, so you get compile-time type-checking and don't have to cast on every <code class="inline">get</code>. For DSA, you'll use them mostly to declare collections; you'll rarely write your own generic class.</p>
+
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Without generics — gross, error-prone</span>
+List names = <span class="tok-kw">new</span> ArrayList();
+names.add(<span class="tok-str">"Riya"</span>);
+String s = (String) names.get(<span class="tok-num">0</span>);    <span class="tok-com">// manual cast required</span>
+
+<span class="tok-com">// With generics — clean and type-safe</span>
+List&lt;String&gt; names2 = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+names2.add(<span class="tok-str">"Riya"</span>);
+String s2 = names2.get(<span class="tok-num">0</span>);          <span class="tok-com">// no cast</span>
+
+<span class="tok-com">// The diamond &lt;&gt; — infers the type</span>
+Map&lt;String, List&lt;Integer&gt;&gt; index = <span class="tok-kw">new</span> HashMap&lt;&gt;();</code></pre>
+  </div>
+
+  <h3 class="subhead">A simple generic class</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">class</span> <span class="tok-typ">Pair</span>&lt;A, B&gt; {
+    A first;
+    B second;
+    <span class="tok-typ">Pair</span>(A a, B b) { first = a; second = b; }
+}
+
+Pair&lt;String, Integer&gt; p = <span class="tok-kw">new</span> Pair&lt;&gt;(<span class="tok-str">"score"</span>, <span class="tok-num">99</span>);</code></pre>
+  </div>
+</section>
+
+<!-- ============ LAMBDAS ============ -->
+<section class="topic" id="lambdas">
+  <div class="section-number">§ 8 · Lambdas & functional</div>
+  <h2 class="topic-title">Lambdas & functional bits</h2>
+  <p class="dropcap">A lambda is an anonymous function — a short way to pass behaviour around like data. You've already used them in Comparators. They show up wherever Java expects a single-method interface (called a "functional interface"), and they make your DSA code dramatically shorter.</p>
+
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Single arg, no parens needed</span>
+Function&lt;Integer, Integer&gt; square = x -&gt; x * x;
+square.apply(<span class="tok-num">5</span>);   <span class="tok-com">// 25</span>
+
+<span class="tok-com">// Two args</span>
+BiFunction&lt;Integer, Integer, Integer&gt; add = (a, b) -&gt; a + b;
+
+<span class="tok-com">// Predicate — returns boolean</span>
+Predicate&lt;Integer&gt; isEven = n -&gt; n % <span class="tok-num">2</span> == <span class="tok-num">0</span>;
+
+<span class="tok-com">// Consumer — no return</span>
+Consumer&lt;String&gt; print = s -&gt; System.out.println(s);
+list.forEach(print);
+list.forEach(System.out::println);   <span class="tok-com">// method reference</span></code></pre>
+  </div>
+
+  <h3 class="subhead">Streams — when they help</h3>
+  <p>Streams are a fluent API for transforming collections. Great for one-line transformations, sometimes slower than a plain loop on huge inputs. Use sparingly in DSA—a clear loop usually wins.</p>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Sum of even squares</span>
+<span class="tok-typ">int</span> total = Arrays.stream(nums)
+    .filter(n -&gt; n % <span class="tok-num">2</span> == <span class="tok-num">0</span>)
+    .map(n -&gt; n * n)
+    .sum();
+
+<span class="tok-com">// Distinct sorted list</span>
+List&lt;Integer&gt; uniq = list.stream()
+    .distinct()
+    .sorted()
+    .collect(Collectors.toList());</code></pre>
+  </div>
+</section>
+
+<!-- ============ MATH ============ -->
+<section class="topic" id="math">
+  <div class="section-number">§ 9 · Math & numeric edges</div>
+  <h2 class="topic-title">Math & numeric edges</h2>
+
+  <div class="code-block" data-lang="java">
+<pre><code>Math.max(a, b);
+Math.min(a, b);
+Math.abs(x);
+Math.pow(<span class="tok-num">2</span>, <span class="tok-num">10</span>);          <span class="tok-com">// 1024.0 (double — cast if needed)</span>
+Math.sqrt(<span class="tok-num">16</span>);             <span class="tok-com">// 4.0</span>
+Math.floor(<span class="tok-num">3.7</span>);            <span class="tok-com">// 3.0</span>
+Math.ceil(<span class="tok-num">3.2</span>);             <span class="tok-com">// 4.0</span>
+Math.floorDiv(-<span class="tok-num">7</span>, <span class="tok-num">2</span>);       <span class="tok-com">// -4   (vs. -7/2 = -3 in Java)</span>
+Math.floorMod(-<span class="tok-num">7</span>, <span class="tok-num">3</span>);       <span class="tok-com">// 2    (always non-negative for + mod)</span>
+
+<span class="tok-com">// Limits</span>
+Integer.MAX_VALUE;            <span class="tok-com">// 2,147,483,647</span>
+Integer.MIN_VALUE;
+Long.MAX_VALUE;</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Negative modulo</div>
+    In Java, <code class="inline">-7 % 3</code> is <code class="inline">-1</code>, not <code class="inline">2</code>. For hash-style "wrap to positive" math, use <code class="inline">Math.floorMod(-7, 3)</code> or <code class="inline">((x % m) + m) % m</code>. Many graph and grid problems quietly need this.
+  </div>
+</section>
+
+<!-- ============ PITFALLS ============ -->
+<section class="topic" id="pitfalls">
+  <div class="section-number">§ 10 · Pitfalls</div>
+  <h2 class="topic-title">Top 10 Java pitfalls in DSA</h2>
+
+  <ol class="list">
+    <li><strong><code class="inline">==</code> on Strings / wrappers</strong> compares references, not content. Always use <code class="inline">.equals()</code>.</li>
+    <li><strong>Array length</strong> is <code class="inline">arr.length</code>; <strong>String length</strong> is <code class="inline">s.length()</code>; <strong>Collection size</strong> is <code class="inline">list.size()</code>. Three different forms—memorise them.</li>
+    <li><strong><code class="inline">list.remove(int)</code> ambiguity.</strong> On a <code class="inline">List&lt;Integer&gt;</code>, <code class="inline">remove(2)</code> removes <em>index 2</em>. To remove the value 2, write <code class="inline">remove(Integer.valueOf(2))</code>.</li>
+    <li><strong>Integer overflow.</strong> When inputs near 10⁹ and you're adding or multiplying, switch to <code class="inline">long</code>: <code class="inline">long product = (long) a * b;</code>.</li>
+    <li><strong><code class="inline">b - a</code> in a Comparator</strong> overflows for very large/small values. Prefer <code class="inline">Integer.compare(b, a)</code>.</li>
+    <li><strong>Modifying a collection while iterating</strong> throws <code class="inline">ConcurrentModificationException</code>. Use an <code class="inline">Iterator</code>'s <code class="inline">remove()</code> or collect-then-remove.</li>
+    <li><strong>String concatenation in a loop</strong> is O(n²). Use <code class="inline">StringBuilder</code>.</li>
+    <li><strong><code class="inline">Arrays.asList(intArr)</code></strong> returns a <code class="inline">List&lt;int[]&gt;</code> of size 1, not a <code class="inline">List&lt;Integer&gt;</code>. Use <code class="inline">Arrays.stream(arr).boxed().toList()</code>.</li>
+    <li><strong>Integer division.</strong> <code class="inline">5 / 2</code> is <code class="inline">2</code>, not <code class="inline">2.5</code>. Cast to double for fractional results: <code class="inline">(double) 5 / 2</code>.</li>
+    <li><strong>Forgetting to snapshot in backtracking.</strong> Add <code class="inline">new ArrayList&lt;&gt;(current)</code> to the result list, not <code class="inline">current</code> itself—or every entry will be the same mutated list.</li>
+  </ol>
+</section>
+
+<!-- ============ SNIPPETS ============ -->
+<section class="topic" id="snippets">
+  <div class="section-number">§ 11 · Snippet vault</div>
+  <h2 class="topic-title">The snippet vault</h2>
+  <p>Six copy-paste-ready blocks you'll reach for in interview after interview.</p>
+
+  <h4 class="minor">Frequency map of a String</h4>
+  <div class="code-block" data-lang="java">
+<pre><code>Map&lt;Character, Integer&gt; freq = <span class="tok-kw">new</span> HashMap&lt;&gt;();
+<span class="tok-kw">for</span> (<span class="tok-typ">char</span> c : s.toCharArray())
+    freq.merge(c, <span class="tok-num">1</span>, Integer::sum);</code></pre>
+  </div>
+
+  <h4 class="minor">Top-K with a min-heap</h4>
+  <div class="code-block" data-lang="java">
+<pre><code>PriorityQueue&lt;Integer&gt; pq = <span class="tok-kw">new</span> PriorityQueue&lt;&gt;();
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> n : nums) {
+    pq.offer(n);
+    <span class="tok-kw">if</span> (pq.size() &gt; k) pq.poll();
+}
+<span class="tok-com">// pq now holds the k largest values; pq.peek() is the kth-largest</span></code></pre>
+  </div>
+
+  <h4 class="minor">Grid 4-direction BFS</h4>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span>[][] D = {{-<span class="tok-num">1</span>,<span class="tok-num">0</span>},{<span class="tok-num">1</span>,<span class="tok-num">0</span>},{<span class="tok-num">0</span>,-<span class="tok-num">1</span>},{<span class="tok-num">0</span>,<span class="tok-num">1</span>}};
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span>[] d : D) {
+    <span class="tok-typ">int</span> nr = r + d[<span class="tok-num">0</span>], nc = c + d[<span class="tok-num">1</span>];
+    <span class="tok-kw">if</span> (nr &lt; <span class="tok-num">0</span> || nr &gt;= R || nc &lt; <span class="tok-num">0</span> || nc &gt;= C) <span class="tok-kw">continue</span>;
+    <span class="tok-com">// process (nr, nc)</span>
+}</code></pre>
+  </div>
+
+  <h4 class="minor">Reverse a linked list</h4>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">ListNode</span> prev = <span class="tok-kw">null</span>, curr = head;
+<span class="tok-kw">while</span> (curr != <span class="tok-kw">null</span>) {
+    <span class="tok-typ">ListNode</span> next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+}
+<span class="tok-kw">return</span> prev;</code></pre>
+  </div>
+
+  <h4 class="minor">Two-pointer template (sorted array, pair sum)</h4>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span> l = <span class="tok-num">0</span>, r = nums.length - <span class="tok-num">1</span>;
+<span class="tok-kw">while</span> (l &lt; r) {
+    <span class="tok-typ">int</span> sum = nums[l] + nums[r];
+    <span class="tok-kw">if</span> (sum == target) <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{l, r};
+    <span class="tok-kw">if</span> (sum &lt; target) l++; <span class="tok-kw">else</span> r--;
+}</code></pre>
+  </div>
+
+  <h4 class="minor">Tree DFS skeleton</h4>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span> <span class="tok-fn">dfs</span>(<span class="tok-typ">TreeNode</span> node) {
+    <span class="tok-kw">if</span> (node == <span class="tok-kw">null</span>) <span class="tok-kw">return</span> <span class="tok-num">0</span>;            <span class="tok-com">// base case</span>
+    <span class="tok-typ">int</span> left  = dfs(node.left);
+    <span class="tok-typ">int</span> right = dfs(node.right);
+    <span class="tok-com">// combine with node.val</span>
+    <span class="tok-kw">return</span> Math.max(left, right) + <span class="tok-num">1</span>;
+}</code></pre>
+  </div>
+
+  <div class="ornament">❦</div>
+  <p style="font-size:1.1rem;font-family:'Fraunces',serif;font-style:italic;color:var(--ink-soft);text-align:center;margin-top:2rem;">
+    You now have complexity, structures, patterns, and Java. The rest is hours at the keyboard.
+  </p>
+  <p style="text-align:center;margin-top:1.5rem;">
+    <a href="index.html" class="path-cta" style="text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px;">Back to the index</a>
+  </p>
+</section>
+
+</article>
+</div>
+
+<footer>
+  The DSA Codex · Chapter IV · <em>the right tools, sharp and few</em>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

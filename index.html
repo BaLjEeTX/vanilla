@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The DSA Codex — Learn Data Structures & Algorithms in Java</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html" class="brand">The DSA Codex</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Complexity</a></li>
+    <li><a href="data-structures.html">Data Structures</a></li>
+    <li><a href="algorithms.html">Algorithms</a></li>
+    <li><a href="java.html">Java Toolkit</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">A free, self-paced field guide · No course required</div>
+  <h1>Learn DSA<br/>the way it <em>actually</em><br/>clicks.</h1>
+  <p class="hero-sub">
+    Plain-English analogies. Production Java. Hand-picked LeetCode problems after every concept.
+    Built for people who want to <em>understand</em>, not just memorize.
+  </p>
+</header>
+
+<section class="manifesto">
+  <p>
+    Most DSA resources teach you to <em>recognize</em> code. This one teaches you to <em>build intuition</em>—so that when a problem you've never seen before lands in front of you, your brain reaches for the right tool on its own.
+  </p>
+</section>
+
+<section class="path-grid">
+  <a href="index.html#bigO" class="path-card" data-num="01">
+    <h3>Complexity</h3>
+    <p>Big-O notation without the math degree. Learn to look at code and immediately know if it'll scale—or melt.</p>
+    <span class="path-cta">Start here</span>
+  </a>
+  <a href="data-structures.html" class="path-card" data-num="02">
+    <h3>Data Structures</h3>
+    <p>Arrays, hashmaps, trees, graphs, heaps, tries—every container explained with an everyday-life analogy, then coded in Java.</p>
+    <span class="path-cta">Open the chapter</span>
+  </a>
+  <a href="algorithms.html" class="path-card" data-num="03">
+    <h3>Algorithms</h3>
+    <p>Every pattern interviewers actually ask: two pointers, sliding window, BFS, DFS, DP, backtracking—with the trigger phrases that tell you which to use.</p>
+    <span class="path-cta">See the patterns</span>
+  </a>
+  <a href="java.html" class="path-card" data-num="04">
+    <h3>Java Toolkit</h3>
+    <p>Exactly the Java you need for DSA—Collections, Comparator, generics, common gotchas. Nothing more.</p>
+    <span class="path-cta">Open the manual</span>
+  </a>
+</section>
+
+<div class="ornament">❦</div>
+
+<div class="layout">
+
+<aside class="toc">
+  <div class="toc-title">Chapter I · Complexity</div>
+  <ol>
+    <li><a href="#why">Why complexity matters</a></li>
+    <li><a href="#bigO">What Big-O really is</a></li>
+    <li><a href="#measuring">Reading code for complexity</a></li>
+    <li><a href="#growth">The growth-rate hierarchy</a></li>
+    <li><a href="#space">Space complexity</a></li>
+    <li><a href="#amortized">Amortized & average case</a></li>
+    <li><a href="#table">Cheat-sheet table</a></li>
+    <li><a href="#practice">Practice problems</a></li>
+  </ol>
+</aside>
+
+<article class="content">
+
+<section class="topic" id="why">
+  <div class="section-number">Chapter I · § 1</div>
+  <h2 class="topic-title">Why complexity matters</h2>
+  <p class="dropcap">
+    Imagine you're searching a phone book for "Sharma." You could flip through every page from "A" onward—or you could open to the middle, see whether "S" comes before or after, and keep halving the remaining pages. Both methods <em>find</em> the name. One takes seconds; the other could take an hour. <strong>Complexity analysis is the language we use to describe the difference.</strong>
+  </p>
+
+  <p>
+    When an interviewer says "what's the time complexity of your solution?" they're really asking: <em>how much longer does your code take when the input grows?</em> Not how many seconds—that depends on the machine. They want the <em>shape</em> of the growth.
+  </p>
+
+  <div class="analogy">
+    Think of a chef. A recipe that says <em>"chop one onion"</em> takes one onion's worth of time. A recipe that says <em>"chop all the onions, then for each onion check every other onion"</em> takes exponentially longer as the kitchen grows. Big-O is how we describe these recipes in shorthand.
+  </div>
+</section>
+
+<section class="topic" id="bigO">
+  <div class="section-number">Chapter I · § 2</div>
+  <h2 class="topic-title">What Big-O really is</h2>
+  <p>
+    Big-O describes the <strong>upper bound</strong> on how an algorithm scales with input size <code class="inline">n</code>. It ignores constants and lower-order terms—because when <code class="inline">n</code> is huge, only the dominant term matters.
+  </p>
+
+  <h3 class="subhead">The mental model</h3>
+  <p>If your algorithm performs <code class="inline">3n² + 5n + 100</code> operations, we drop everything except the biggest term and call it <code class="inline">O(n²)</code>. Why? Because when <code class="inline">n = 1,000,000</code>, that <code class="inline">3n²</code> dwarfs everything else.</p>
+
+  <div class="analogy">
+    Picking the dominant term is like describing a city's size. Mumbai has <em>millions</em> of people. Yes, technically it has 12,478,447 plus a few stray pigeons—but "millions" is the useful answer.
+  </div>
+
+  <h4 class="minor">The Big-O family</h4>
+  <ul class="list">
+    <li><strong>Big-O (O)</strong> — worst case, the ceiling.</li>
+    <li><strong>Big-Theta (Θ)</strong> — tight bound, when upper = lower.</li>
+    <li><strong>Big-Omega (Ω)</strong> — best case, the floor.</li>
+  </ul>
+  <p>In interviews, "complexity" almost always means Big-O (worst case). Use that as your default.</p>
+</section>
+
+<section class="topic" id="measuring">
+  <div class="section-number">Chapter I · § 3</div>
+  <h2 class="topic-title">Reading code for complexity</h2>
+  <p>You don't compute Big-O—you <em>read</em> it. A few rules cover 95% of cases:</p>
+
+  <h3 class="subhead">Rule 1 — A single loop over n items is O(n)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// O(n) — visit each element once</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; nums.length; i++) {
+    System.out.println(nums[i]);
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Rule 2 — Nested loops multiply</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// O(n²) — for every i, we scan every j</span>
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++) {
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> j = <span class="tok-num">0</span>; j &lt; n; j++) {
+        System.out.println(i + <span class="tok-str">","</span> + j);
+    }
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Rule 3 — Halving the input is O(log n)</h3>
+  <p>Anything that <em>repeatedly halves</em> what's left—binary search, balanced trees, divide-and-conquer—is logarithmic.</p>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// O(log n) — binary search</span>
+<span class="tok-typ">int</span> lo = <span class="tok-num">0</span>, hi = nums.length - <span class="tok-num">1</span>;
+<span class="tok-kw">while</span> (lo &lt;= hi) {
+    <span class="tok-typ">int</span> mid = lo + (hi - lo) / <span class="tok-num">2</span>;
+    <span class="tok-kw">if</span> (nums[mid] == target) <span class="tok-kw">return</span> mid;
+    <span class="tok-kw">if</span> (nums[mid] &lt; target) lo = mid + <span class="tok-num">1</span>;
+    <span class="tok-kw">else</span>                   hi = mid - <span class="tok-num">1</span>;
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Rule 4 — Recursion that branches doubles each step</h3>
+  <p>Naïve recursive Fibonacci spawns two new calls at every level, giving roughly <code class="inline">O(2ⁿ)</code>—catastrophic. (We'll fix this with memoization in the Algorithms chapter.)</p>
+
+  <div class="callout">
+    <div class="callout-title">Rule of thumb</div>
+    Count the loops, count the recursive branches, look for halving. If <code class="inline">n ≤ 10⁵</code>, you probably need <code class="inline">O(n)</code> or <code class="inline">O(n log n)</code>. <code class="inline">O(n²)</code> is fine up to about <code class="inline">n = 10⁴</code>. Beyond that, you need a smarter approach.
+  </div>
+</section>
+
+<section class="topic" id="growth">
+  <div class="section-number">Chapter I · § 4</div>
+  <h2 class="topic-title">The growth-rate hierarchy</h2>
+  <p>From fastest to slowest, the complexity classes you'll meet 99% of the time:</p>
+
+  <table class="complexity">
+    <thead>
+      <tr><th>Big-O</th><th>Name</th><th>Example</th><th>Verdict</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="bigO good">O(1)</span></td><td>Constant</td><td>HashMap lookup, array index</td><td>Holy grail</td></tr>
+      <tr><td><span class="bigO good">O(log n)</span></td><td>Logarithmic</td><td>Binary search, BST find</td><td>Excellent</td></tr>
+      <tr><td><span class="bigO good">O(n)</span></td><td>Linear</td><td>Single pass over an array</td><td>Great</td></tr>
+      <tr><td><span class="bigO ok">O(n log n)</span></td><td>Linearithmic</td><td>Merge sort, heap sort</td><td>Acceptable, often optimal</td></tr>
+      <tr><td><span class="bigO bad">O(n²)</span></td><td>Quadratic</td><td>Nested loops, bubble sort</td><td>OK for small n</td></tr>
+      <tr><td><span class="bigO bad">O(2ⁿ)</span></td><td>Exponential</td><td>Naïve recursion, subset gen</td><td>Only for tiny n</td></tr>
+      <tr><td><span class="bigO bad">O(n!)</span></td><td>Factorial</td><td>Permutations, brute TSP</td><td>n &gt; 11 = forget it</td></tr>
+    </tbody>
+  </table>
+
+  <div class="analogy">
+    Picture a hallway with <code class="inline">n</code> doors. O(1) opens one door. O(log n) opens half, then half of half. O(n) tries every door. O(n²) opens every door, then walks back through every door from each one. O(2ⁿ) explores every possible combination of open and closed doors. O(n!) tries every possible <em>order</em> of opening them. The leaps between rows are <em>enormous</em>.
+  </div>
+</section>
+
+<section class="topic" id="space">
+  <div class="section-number">Chapter I · § 5</div>
+  <h2 class="topic-title">Space complexity</h2>
+  <p>Same idea, different resource: instead of "how many operations?" we ask <strong>"how much extra memory does this use as n grows?"</strong></p>
+
+  <p>Crucially, space complexity counts <em>auxiliary space</em>—memory you allocate beyond the input. Returning the input array unchanged is still considered O(1) extra space.</p>
+
+  <h4 class="minor">Common space patterns</h4>
+  <ul class="list">
+    <li><strong>O(1)</strong> — A few variables. Two pointers shifting through an array uses constant space.</li>
+    <li><strong>O(n)</strong> — Building a hashmap of every element, or a copy of the array.</li>
+    <li><strong>O(log n)</strong> — The call stack of a balanced recursive algorithm (like merge sort's recursion depth).</li>
+    <li><strong>O(n²)</strong> — A 2D DP table of size n × n.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-title">Interview tip</div>
+    Always state <em>both</em> time and space complexity when finishing a solution. Saying "O(n) time, O(1) space" out loud signals senior thinking even on easy problems.
+  </div>
+</section>
+
+<section class="topic" id="amortized">
+  <div class="section-number">Chapter I · § 6</div>
+  <h2 class="topic-title">Amortized & average case</h2>
+  <p>Sometimes a single operation is occasionally expensive, but <em>on average</em> over many operations, it's cheap. That's <strong>amortized complexity</strong>.</p>
+
+  <div class="analogy">
+    Think of an ArrayList. Adding an element is normally O(1). But when it's full, it doubles in size and copies everything—an O(n) hit. That copy is rare though. If you average the cost over many adds, it works out to O(1) per add. We say <code class="inline">add()</code> is <strong>amortized O(1)</strong>.
+  </div>
+
+  <p>HashMap lookups are the same: worst case O(n) when every key collides into one bucket, but with a decent hash function the average is O(1). When people say "HashMap is O(1)," they mean amortized average—not worst case.</p>
+</section>
+
+<section class="topic" id="table">
+  <div class="section-number">Chapter I · § 7</div>
+  <h2 class="topic-title">Cheat-sheet: data structure operations</h2>
+  <p>Memorize this table. Interviewers expect instant recall.</p>
+
+  <table class="complexity">
+    <thead>
+      <tr><th>Structure</th><th>Access</th><th>Search</th><th>Insert</th><th>Delete</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Array</td><td><span class="bigO good">O(1)</span></td><td><span class="bigO good">O(n)</span></td><td><span class="bigO bad">O(n)</span></td><td><span class="bigO bad">O(n)</span></td></tr>
+      <tr><td>ArrayList (end)</td><td><span class="bigO good">O(1)</span></td><td><span class="bigO good">O(n)</span></td><td><span class="bigO good">O(1)*</span></td><td><span class="bigO good">O(n)</span></td></tr>
+      <tr><td>LinkedList</td><td><span class="bigO bad">O(n)</span></td><td><span class="bigO bad">O(n)</span></td><td><span class="bigO good">O(1)</span></td><td><span class="bigO good">O(1)</span></td></tr>
+      <tr><td>Stack / Queue</td><td>—</td><td>—</td><td><span class="bigO good">O(1)</span></td><td><span class="bigO good">O(1)</span></td></tr>
+      <tr><td>HashMap / HashSet</td><td>—</td><td><span class="bigO good">O(1)*</span></td><td><span class="bigO good">O(1)*</span></td><td><span class="bigO good">O(1)*</span></td></tr>
+      <tr><td>TreeMap / TreeSet</td><td>—</td><td><span class="bigO good">O(log n)</span></td><td><span class="bigO good">O(log n)</span></td><td><span class="bigO good">O(log n)</span></td></tr>
+      <tr><td>Heap (PriorityQueue)</td><td><span class="bigO good">O(1)</span> peek</td><td><span class="bigO bad">O(n)</span></td><td><span class="bigO good">O(log n)</span></td><td><span class="bigO good">O(log n)</span></td></tr>
+      <tr><td>Binary Search Tree</td><td><span class="bigO good">O(log n)</span></td><td><span class="bigO good">O(log n)</span></td><td><span class="bigO good">O(log n)</span></td><td><span class="bigO good">O(log n)</span></td></tr>
+      <tr><td>Trie</td><td>—</td><td><span class="bigO good">O(m)</span></td><td><span class="bigO good">O(m)</span></td><td><span class="bigO good">O(m)</span></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;color:var(--ink-soft);font-style:italic;">* amortized · m = key length for Trie</p>
+</section>
+
+<section class="topic" id="practice">
+  <div class="section-number">Chapter I · § 8</div>
+  <h2 class="topic-title">Practice problems</h2>
+  <p>These problems aren't about coding—they're about <em>analyzing</em>. Look at each, name its complexity, and only then write the solution. Then check the discussion to see if a faster approach exists.</p>
+
+  <div class="problems">
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/running-sum-of-1d-array/" target="_blank" rel="noopener">
+        <span class="pc-num">№ 1480</span>
+        <span class="pc-title">Running Sum of 1D Array</span>
+        <span class="pc-diff easy">Easy</span>
+      </a>
+      <a class="problem-card" href="https://leetcode.com/problems/richest-customer-wealth/" target="_blank" rel="noopener">
+        <span class="pc-num">№ 1672</span>
+        <span class="pc-title">Richest Customer Wealth</span>
+        <span class="pc-diff easy">Easy</span>
+      </a>
+      <a class="problem-card" href="https://leetcode.com/problems/fizz-buzz/" target="_blank" rel="noopener">
+        <span class="pc-num">№ 412</span>
+        <span class="pc-title">Fizz Buzz</span>
+        <span class="pc-diff easy">Easy</span>
+      </a>
+      <a class="problem-card" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">
+        <span class="pc-num">№ 121</span>
+        <span class="pc-title">Best Time to Buy and Sell Stock</span>
+        <span class="pc-diff easy">Easy</span>
+      </a>
+      <a class="problem-card" href="https://leetcode.com/problems/maximum-subarray/" target="_blank" rel="noopener">
+        <span class="pc-num">№ 53</span>
+        <span class="pc-title">Maximum Subarray</span>
+        <span class="pc-diff medium">Medium</span>
+      </a>
+      <a class="problem-card" href="https://leetcode.com/problems/move-zeroes/" target="_blank" rel="noopener">
+        <span class="pc-num">№ 283</span>
+        <span class="pc-title">Move Zeroes</span>
+        <span class="pc-diff easy">Easy</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ornament">❦</div>
+
+  <p style="font-size:1.1rem;font-family:'Fraunces',serif;font-style:italic;color:var(--ink-soft);text-align:center;margin-top:2rem;">
+    With complexity in your bones, you're ready for the next chapter — the data structures themselves.
+  </p>
+  <p style="text-align:center;margin-top:1.5rem;">
+    <a href="data-structures.html" class="path-cta" style="text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px;">Continue to Data Structures</a>
+  </p>
+</section>
+
+</article>
+</div>
+
+<footer>
+  The DSA Codex · Built for self-learners · <em>read · understand · solve</em>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Algorithms — The DSA Codex</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html" class="brand">The DSA Codex</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Complexity</a></li>
+    <li><a href="data-structures.html">Data Structures</a></li>
+    <li><a href="algorithms.html" class="active">Algorithms</a></li>
+    <li><a href="java.html">Java Toolkit</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">Chapter III · The patterns of problem-solving</div>
+  <h1>Algorithm <em>Patterns</em></h1>
+  <p class="hero-sub">There are not a thousand kinds of problems—there are about fifteen patterns, dressed up a thousand ways. Learn to recognise the costume, and every problem becomes one you've already seen.</p>
+</header>
+
+<section class="manifesto">
+  <p>
+    The secret nobody tells you: <em>interviewers reuse the same patterns</em>. Once you can read a problem and feel your brain whisper "this is a sliding window" or "this is a topological sort," you stop solving problems and start <em>recognising</em> them.
+  </p>
+</section>
+
+<div class="layout">
+
+<aside class="toc">
+  <div class="toc-title">Chapter III · Patterns</div>
+  <ol>
+    <li><a href="#two-pointers">Two Pointers</a></li>
+    <li><a href="#sliding-window">Sliding Window</a></li>
+    <li><a href="#prefix-sum">Prefix Sum</a></li>
+    <li><a href="#binary-search">Binary Search</a></li>
+    <li><a href="#sorting">Sorting</a></li>
+    <li><a href="#recursion">Recursion</a></li>
+    <li><a href="#backtracking">Backtracking</a></li>
+    <li><a href="#bfs">BFS</a></li>
+    <li><a href="#dfs">DFS</a></li>
+    <li><a href="#topo">Topological Sort</a></li>
+    <li><a href="#dijkstra">Dijkstra</a></li>
+    <li><a href="#greedy">Greedy</a></li>
+    <li><a href="#dp">Dynamic Programming</a></li>
+    <li><a href="#bits">Bit Manipulation</a></li>
+    <li><a href="#monotonic">Monotonic Stack</a></li>
+    <li><a href="#playbook">The recognition playbook</a></li>
+  </ol>
+</aside>
+
+<article class="content">
+
+<!-- ============ TWO POINTERS ============ -->
+<section class="topic" id="two-pointers">
+  <div class="section-number">§ 1 · Two Pointers</div>
+  <h2 class="topic-title">Two Pointers</h2>
+  <p class="dropcap">Two pointers is exactly what it sounds like—two indices walking through your data, usually a sorted array or string. They might start at opposite ends and squeeze toward each other, or both start at the front and move at different speeds. The technique replaces an O(n²) nested loop with an O(n) single sweep.</p>
+
+  <div class="analogy">
+    Imagine reading a long list of names sorted by height to find a pair that adds up to exactly two metres. A nested loop checks every pair—exhausting. With two pointers, one finger at the shortest name, one at the tallest: too tall? Move the right finger down. Too short? Move the left finger up. One pass, done.
+  </div>
+
+  <h3 class="subhead">When to recognise it</h3>
+  <ul class="list">
+    <li>The array is <strong>sorted</strong> (or you can sort it) and you're looking for a pair/triple with a target sum.</li>
+    <li>You're checking a string for palindrome properties.</li>
+    <li>You're partitioning an array in place (e.g., moving zeros to the end).</li>
+    <li>The brute force is "check every pair" → O(n²). Two pointers gets you to O(n).</li>
+  </ul>
+
+  <h3 class="subhead">Template — opposite ends</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Two Sum on a SORTED array</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span>[] <span class="tok-fn">twoSum</span>(<span class="tok-typ">int</span>[] nums, <span class="tok-typ">int</span> target) {
+    <span class="tok-typ">int</span> l = <span class="tok-num">0</span>, r = nums.length - <span class="tok-num">1</span>;
+    <span class="tok-kw">while</span> (l &lt; r) {
+        <span class="tok-typ">int</span> sum = nums[l] + nums[r];
+        <span class="tok-kw">if</span> (sum == target) <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{l, r};
+        <span class="tok-kw">if</span> (sum &lt; target) l++;
+        <span class="tok-kw">else</span>              r--;
+    }
+    <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{-<span class="tok-num">1</span>, -<span class="tok-num">1</span>};
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Template — same direction (fast/slow)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Remove duplicates from a sorted array in place</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">removeDuplicates</span>(<span class="tok-typ">int</span>[] nums) {
+    <span class="tok-typ">int</span> slow = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> fast = <span class="tok-num">1</span>; fast &lt; nums.length; fast++) {
+        <span class="tok-kw">if</span> (nums[fast] != nums[slow]) {
+            slow++;
+            nums[slow] = nums[fast];
+        }
+    }
+    <span class="tok-kw">return</span> slow + <span class="tok-num">1</span>;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/" target="_blank" rel="noopener"><span class="pc-num">№ 167</span><span class="pc-title">Two Sum II (Sorted)</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/valid-palindrome/" target="_blank" rel="noopener"><span class="pc-num">№ 125</span><span class="pc-title">Valid Palindrome</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener"><span class="pc-num">№ 15</span><span class="pc-title">3Sum</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/container-with-most-water/" target="_blank" rel="noopener"><span class="pc-num">№ 11</span><span class="pc-title">Container With Most Water</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noopener"><span class="pc-num">№ 42</span><span class="pc-title">Trapping Rain Water</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/move-zeroes/" target="_blank" rel="noopener"><span class="pc-num">№ 283</span><span class="pc-title">Move Zeroes</span><span class="pc-diff easy">Easy</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDING WINDOW ============ -->
+<section class="topic" id="sliding-window">
+  <div class="section-number">§ 2 · Sliding Window</div>
+  <h2 class="topic-title">Sliding Window</h2>
+  <p class="dropcap">A sliding window is two pointers that maintain a "window" of elements between them, expanding the right edge to include more and shrinking the left edge when the window breaks a constraint. It transforms "look at every contiguous subarray" (O(n²) or worse) into a single linear sweep.</p>
+
+  <div class="analogy">
+    Picture pushing a small rectangular magnifying glass across a row of letters, growing it whenever you can, shrinking it when you have to. You never go back. The information about <em>"what's currently in the window"</em> updates as the glass moves—and your answer is the best window you've seen.
+  </div>
+
+  <h3 class="subhead">When to recognise it</h3>
+  <ul class="list">
+    <li>Problem mentions a <strong>contiguous</strong> subarray or substring.</li>
+    <li>You're tracking something inside a window — max, sum, distinct chars, frequency.</li>
+    <li>"Longest / shortest / count of subarrays with property X."</li>
+    <li>Brute force is O(n²) checking every (i, j) pair → window collapses it to O(n).</li>
+  </ul>
+
+  <h3 class="subhead">Template — variable-size window</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Longest substring with at most K distinct characters</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">longestKDistinct</span>(String s, <span class="tok-typ">int</span> k) {
+    Map&lt;Character, Integer&gt; freq = <span class="tok-kw">new</span> HashMap&lt;&gt;();
+    <span class="tok-typ">int</span> left = <span class="tok-num">0</span>, best = <span class="tok-num">0</span>;
+
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> right = <span class="tok-num">0</span>; right &lt; s.length(); right++) {
+        <span class="tok-typ">char</span> c = s.charAt(right);
+        freq.put(c, freq.getOrDefault(c, <span class="tok-num">0</span>) + <span class="tok-num">1</span>);
+
+        <span class="tok-com">// Shrink until the window is valid again</span>
+        <span class="tok-kw">while</span> (freq.size() &gt; k) {
+            <span class="tok-typ">char</span> lc = s.charAt(left);
+            freq.put(lc, freq.get(lc) - <span class="tok-num">1</span>);
+            <span class="tok-kw">if</span> (freq.get(lc) == <span class="tok-num">0</span>) freq.remove(lc);
+            left++;
+        }
+        best = Math.max(best, right - left + <span class="tok-num">1</span>);
+    }
+    <span class="tok-kw">return</span> best;
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Template — fixed-size window</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Max sum of any K consecutive elements</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">maxSumK</span>(<span class="tok-typ">int</span>[] nums, <span class="tok-typ">int</span> k) {
+    <span class="tok-typ">int</span> sum = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; k; i++) sum += nums[i];
+    <span class="tok-typ">int</span> best = sum;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = k; i &lt; nums.length; i++) {
+        sum += nums[i] - nums[i - k];    <span class="tok-com">// slide</span>
+        best = Math.max(best, sum);
+    }
+    <span class="tok-kw">return</span> best;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank" rel="noopener"><span class="pc-num">№ 3</span><span class="pc-title">Longest Substring w/o Repeating</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/minimum-size-subarray-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 209</span><span class="pc-title">Minimum Size Subarray Sum</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/longest-repeating-character-replacement/" target="_blank" rel="noopener"><span class="pc-num">№ 424</span><span class="pc-title">Longest Repeating Character Replacement</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/permutation-in-string/" target="_blank" rel="noopener"><span class="pc-num">№ 567</span><span class="pc-title">Permutation in String</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/find-all-anagrams-in-a-string/" target="_blank" rel="noopener"><span class="pc-num">№ 438</span><span class="pc-title">Find All Anagrams</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/minimum-window-substring/" target="_blank" rel="noopener"><span class="pc-num">№ 76</span><span class="pc-title">Minimum Window Substring</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PREFIX SUM ============ -->
+<section class="topic" id="prefix-sum">
+  <div class="section-number">§ 3 · Prefix Sum</div>
+  <h2 class="topic-title">Prefix Sum</h2>
+  <p class="dropcap">A prefix-sum array stores running totals: <code class="inline">prefix[i]</code> = sum of <code class="inline">nums[0..i-1]</code>. Once you have it, the sum of <em>any</em> subarray <code class="inline">[l..r]</code> is just <code class="inline">prefix[r+1] - prefix[l]</code>—a single subtraction instead of looping. It's the world's most underrated trick.</p>
+
+  <div class="analogy">
+    Imagine a ruler. The distance between the 13 cm mark and the 27 cm mark? You don't measure the gap—you do 27 − 13 = 14. A prefix sum turns "what's the sum between positions L and R?" into the exact same subtraction.
+  </div>
+
+  <h3 class="subhead">Template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span>[] prefix = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[nums.length + <span class="tok-num">1</span>];
+<span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; nums.length; i++)
+    prefix[i + <span class="tok-num">1</span>] = prefix[i] + nums[i];
+
+<span class="tok-com">// sum of nums[l..r] inclusive:</span>
+<span class="tok-typ">int</span> sum = prefix[r + <span class="tok-num">1</span>] - prefix[l];</code></pre>
+  </div>
+
+  <h3 class="subhead">The hashmap upgrade — "subarray sum equals K"</h3>
+  <p>Combine prefix sums with a hashmap and you can count subarrays with a specific sum in O(n):</p>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">subarraySum</span>(<span class="tok-typ">int</span>[] nums, <span class="tok-typ">int</span> k) {
+    Map&lt;Integer, Integer&gt; seen = <span class="tok-kw">new</span> HashMap&lt;&gt;();
+    seen.put(<span class="tok-num">0</span>, <span class="tok-num">1</span>);                  <span class="tok-com">// empty prefix</span>
+    <span class="tok-typ">int</span> sum = <span class="tok-num">0</span>, count = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> n : nums) {
+        sum += n;
+        count += seen.getOrDefault(sum - k, <span class="tok-num">0</span>);
+        seen.put(sum, seen.getOrDefault(sum, <span class="tok-num">0</span>) + <span class="tok-num">1</span>);
+    }
+    <span class="tok-kw">return</span> count;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/running-sum-of-1d-array/" target="_blank" rel="noopener"><span class="pc-num">№ 1480</span><span class="pc-title">Running Sum of 1D Array</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/range-sum-query-immutable/" target="_blank" rel="noopener"><span class="pc-num">№ 303</span><span class="pc-title">Range Sum Query — Immutable</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/subarray-sum-equals-k/" target="_blank" rel="noopener"><span class="pc-num">№ 560</span><span class="pc-title">Subarray Sum Equals K</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/contiguous-array/" target="_blank" rel="noopener"><span class="pc-num">№ 525</span><span class="pc-title">Contiguous Array</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/range-sum-query-2d-immutable/" target="_blank" rel="noopener"><span class="pc-num">№ 304</span><span class="pc-title">Range Sum Query 2D</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BINARY SEARCH ============ -->
+<section class="topic" id="binary-search">
+  <div class="section-number">§ 4 · Binary Search</div>
+  <h2 class="topic-title">Binary Search</h2>
+  <p class="dropcap">Binary search is the phonebook trick formalised. Given something sorted (or monotonic), you halve the search space at every step, reaching the target in O(log n). The shocker is how often it applies to problems that don't look sorted at first glance—anywhere you can ask "is this value too big or too small?" and the answer is monotonic, binary search applies.</p>
+
+  <div class="analogy">
+    Twenty-questions. Is the number bigger than 50? Yes. Bigger than 75? No. Bigger than 62? Yes. Each yes/no chops the remaining possibilities in half. You can pinpoint any number 1–100 in 7 guesses because <code class="inline">2⁷ = 128 &gt; 100</code>. Binary search is just twenty-questions running over an array.
+  </div>
+
+  <h3 class="subhead">The canonical template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">binarySearch</span>(<span class="tok-typ">int</span>[] nums, <span class="tok-typ">int</span> target) {
+    <span class="tok-typ">int</span> lo = <span class="tok-num">0</span>, hi = nums.length - <span class="tok-num">1</span>;
+    <span class="tok-kw">while</span> (lo &lt;= hi) {
+        <span class="tok-typ">int</span> mid = lo + (hi - lo) / <span class="tok-num">2</span>;   <span class="tok-com">// avoids overflow</span>
+        <span class="tok-kw">if</span> (nums[mid] == target) <span class="tok-kw">return</span> mid;
+        <span class="tok-kw">if</span> (nums[mid] &lt; target) lo = mid + <span class="tok-num">1</span>;
+        <span class="tok-kw">else</span>                   hi = mid - <span class="tok-num">1</span>;
+    }
+    <span class="tok-kw">return</span> -<span class="tok-num">1</span>;
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Binary search on the answer</h3>
+  <p>The advanced trick: when the answer space is an integer range and you can <em>check</em> a candidate quickly, binary-search the answer itself.</p>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Koko eating bananas — find the minimum eating speed</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">minEatingSpeed</span>(<span class="tok-typ">int</span>[] piles, <span class="tok-typ">int</span> h) {
+    <span class="tok-typ">int</span> lo = <span class="tok-num">1</span>, hi = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> p : piles) hi = Math.max(hi, p);
+
+    <span class="tok-kw">while</span> (lo &lt; hi) {
+        <span class="tok-typ">int</span> mid = lo + (hi - lo) / <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (canFinish(piles, h, mid)) hi = mid;
+        <span class="tok-kw">else</span>                          lo = mid + <span class="tok-num">1</span>;
+    }
+    <span class="tok-kw">return</span> lo;
+}
+<span class="tok-kw">private</span> <span class="tok-kw">boolean</span> <span class="tok-fn">canFinish</span>(<span class="tok-typ">int</span>[] piles, <span class="tok-typ">int</span> h, <span class="tok-typ">int</span> speed) {
+    <span class="tok-typ">long</span> hours = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> p : piles) hours += (p + speed - <span class="tok-num">1</span>) / speed;
+    <span class="tok-kw">return</span> hours &lt;= h;
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Overflow alert</div>
+    Always write <code class="inline">mid = lo + (hi - lo) / 2</code>, never <code class="inline">(lo + hi) / 2</code>. With large indices the latter overflows and gives a negative number — a notorious bug that hid in Java's standard library for years.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/binary-search/" target="_blank" rel="noopener"><span class="pc-num">№ 704</span><span class="pc-title">Binary Search</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/first-bad-version/" target="_blank" rel="noopener"><span class="pc-num">№ 278</span><span class="pc-title">First Bad Version</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/search-insert-position/" target="_blank" rel="noopener"><span class="pc-num">№ 35</span><span class="pc-title">Search Insert Position</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener"><span class="pc-num">№ 33</span><span class="pc-title">Search in Rotated Sorted Array</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank" rel="noopener"><span class="pc-num">№ 153</span><span class="pc-title">Find Minimum in Rotated Sorted</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank" rel="noopener"><span class="pc-num">№ 875</span><span class="pc-title">Koko Eating Bananas</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/median-of-two-sorted-arrays/" target="_blank" rel="noopener"><span class="pc-num">№ 4</span><span class="pc-title">Median of Two Sorted Arrays</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SORTING ============ -->
+<section class="topic" id="sorting">
+  <div class="section-number">§ 5 · Sorting</div>
+  <h2 class="topic-title">Sorting</h2>
+  <p class="dropcap">For interview purposes, you rarely implement a sort by hand — Java's built-in <code class="inline">Arrays.sort</code> uses Dual-Pivot Quicksort for primitives and Timsort for objects, both excellent. What matters is knowing <em>when to sort</em>, the cost (<code class="inline">O(n log n)</code>), and how to customise comparison.</p>
+
+  <div class="analogy">
+    Sorting is unloading a deck of cards into a sorted hand. Bubble sort swaps adjacent cards endlessly—slow. Merge sort splits the deck, sorts each half, then merges them—elegant. Quicksort picks a pivot card and partitions everything else into "smaller" and "bigger" piles, then recurses—fast on average. You don't need to write them. You need to know which costs what.
+  </div>
+
+  <h3 class="subhead">Quick reference</h3>
+  <table class="complexity">
+    <thead><tr><th>Algorithm</th><th>Avg</th><th>Worst</th><th>Space</th><th>Stable?</th></tr></thead>
+    <tbody>
+      <tr><td>Bubble / Insertion</td><td><span class="bigO bad">O(n²)</span></td><td><span class="bigO bad">O(n²)</span></td><td>O(1)</td><td>Yes</td></tr>
+      <tr><td>Merge Sort</td><td><span class="bigO ok">O(n log n)</span></td><td><span class="bigO ok">O(n log n)</span></td><td>O(n)</td><td>Yes</td></tr>
+      <tr><td>Quick Sort</td><td><span class="bigO ok">O(n log n)</span></td><td><span class="bigO bad">O(n²)</span></td><td>O(log n)</td><td>No</td></tr>
+      <tr><td>Heap Sort</td><td><span class="bigO ok">O(n log n)</span></td><td><span class="bigO ok">O(n log n)</span></td><td>O(1)</td><td>No</td></tr>
+      <tr><td>Counting Sort</td><td><span class="bigO good">O(n + k)</span></td><td><span class="bigO good">O(n + k)</span></td><td>O(k)</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subhead">Sorting in Java</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Primitives — ascending only</span>
+<span class="tok-typ">int</span>[] nums = {<span class="tok-num">3</span>, <span class="tok-num">1</span>, <span class="tok-num">4</span>, <span class="tok-num">1</span>, <span class="tok-num">5</span>};
+Arrays.sort(nums);
+
+<span class="tok-com">// Objects with custom comparator</span>
+Integer[] arr = {<span class="tok-num">3</span>, <span class="tok-num">1</span>, <span class="tok-num">4</span>};
+Arrays.sort(arr, (a, b) -&gt; b - a);    <span class="tok-com">// descending</span>
+
+<span class="tok-com">// Sort a List</span>
+List&lt;String&gt; list = <span class="tok-kw">new</span> ArrayList&lt;&gt;(List.of(<span class="tok-str">"banana"</span>, <span class="tok-str">"apple"</span>));
+Collections.sort(list);
+
+<span class="tok-com">// Sort an int[][] by second column</span>
+<span class="tok-typ">int</span>[][] pairs = {{<span class="tok-num">1</span>, <span class="tok-num">3</span>}, {<span class="tok-num">2</span>, <span class="tok-num">1</span>}};
+Arrays.sort(pairs, (a, b) -&gt; a[<span class="tok-num">1</span>] - b[<span class="tok-num">1</span>]);
+
+<span class="tok-com">// Multi-key sort</span>
+Arrays.sort(pairs, (a, b) -&gt; {
+    <span class="tok-kw">if</span> (a[<span class="tok-num">0</span>] != b[<span class="tok-num">0</span>]) <span class="tok-kw">return</span> a[<span class="tok-num">0</span>] - b[<span class="tok-num">0</span>];
+    <span class="tok-kw">return</span> a[<span class="tok-num">1</span>] - b[<span class="tok-num">1</span>];
+});</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/sort-colors/" target="_blank" rel="noopener"><span class="pc-num">№ 75</span><span class="pc-title">Sort Colors</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/merge-intervals/" target="_blank" rel="noopener"><span class="pc-num">№ 56</span><span class="pc-title">Merge Intervals</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/largest-number/" target="_blank" rel="noopener"><span class="pc-num">№ 179</span><span class="pc-title">Largest Number</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/sort-an-array/" target="_blank" rel="noopener"><span class="pc-num">№ 912</span><span class="pc-title">Sort an Array</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECURSION ============ -->
+<section class="topic" id="recursion">
+  <div class="section-number">§ 6 · Recursion</div>
+  <h2 class="topic-title">Recursion</h2>
+  <p class="dropcap">Recursion is a function that solves a problem by calling itself on a smaller piece of the same problem. The art is in two parts: the <strong>base case</strong> (when do we stop?) and the <strong>recursive case</strong> (how does this problem reduce to a smaller version?). Every tree problem, every backtracking problem, every divide-and-conquer algorithm is recursion in disguise.</p>
+
+  <div class="analogy">
+    Russian nesting dolls. To "open all the dolls," you open the outer doll and then — for the smaller doll inside — repeat the same process. You don't need a separate procedure for the inner doll. The base case: when the doll has nothing inside, stop.
+  </div>
+
+  <h3 class="subhead">The three questions to ask</h3>
+  <ol class="list">
+    <li><strong>What's the base case?</strong> The smallest input where the answer is obvious without further recursion.</li>
+    <li><strong>What's the recurrence?</strong> Assuming the function works for inputs smaller than n, how do I build the answer for n?</li>
+    <li><strong>Does it terminate?</strong> Does every recursive call move toward the base case?</li>
+  </ol>
+
+  <h3 class="subhead">Template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Factorial — the canonical example</span>
+<span class="tok-kw">public</span> <span class="tok-typ">long</span> <span class="tok-fn">factorial</span>(<span class="tok-typ">int</span> n) {
+    <span class="tok-kw">if</span> (n &lt;= <span class="tok-num">1</span>) <span class="tok-kw">return</span> <span class="tok-num">1</span>;          <span class="tok-com">// base case</span>
+    <span class="tok-kw">return</span> n * factorial(n - <span class="tok-num">1</span>);    <span class="tok-com">// recurse</span>
+}
+
+<span class="tok-com">// Tree height</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">height</span>(<span class="tok-typ">TreeNode</span> n) {
+    <span class="tok-kw">if</span> (n == <span class="tok-kw">null</span>) <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">1</span> + Math.max(height(n.left), height(n.right));
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Trust the recursion</div>
+    The hardest thing about recursion isn't writing it—it's <em>believing</em> the recursive call works without tracing through it. When you call <code class="inline">height(n.left)</code>, assume it correctly returns the height of the left subtree. Don't trace it. Build the answer for the current node and let recursion handle the rest.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/fibonacci-number/" target="_blank" rel="noopener"><span class="pc-num">№ 509</span><span class="pc-title">Fibonacci Number</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/climbing-stairs/" target="_blank" rel="noopener"><span class="pc-num">№ 70</span><span class="pc-title">Climbing Stairs</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/powx-n/" target="_blank" rel="noopener"><span class="pc-num">№ 50</span><span class="pc-title">Pow(x, n)</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/reverse-linked-list/" target="_blank" rel="noopener"><span class="pc-num">№ 206</span><span class="pc-title">Reverse Linked List (recursive)</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/merge-two-sorted-lists/" target="_blank" rel="noopener"><span class="pc-num">№ 21</span><span class="pc-title">Merge Two Sorted Lists</span><span class="pc-diff easy">Easy</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BACKTRACKING ============ -->
+<section class="topic" id="backtracking">
+  <div class="section-number">§ 7 · Backtracking</div>
+  <h2 class="topic-title">Backtracking</h2>
+  <p class="dropcap">Backtracking is recursion that <strong>tries every option, undoes the bad ones, and remembers the good ones</strong>. You make a choice, recurse, then "un-make" the choice so you can try the next one. It's how you generate all permutations, all subsets, solve sudoku, place N queens, navigate mazes. Anytime the problem says "find all..." or "is there a way to...", backtracking is on the table.</p>
+
+  <div class="analogy">
+    Imagine you're in a maze with breadcrumbs. At each fork you pick a direction, drop a breadcrumb, and walk. If you hit a dead end, you walk back to the last fork, <em>pick up the breadcrumb</em> (so the path is "clean"), and try a different direction. Backtracking is just that—make a choice, explore, undo, try the next.
+  </div>
+
+  <h3 class="subhead">The universal template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">void</span> <span class="tok-fn">backtrack</span>(state, choices) {
+    <span class="tok-kw">if</span> (isGoal(state)) {
+        result.add(<span class="tok-kw">new</span> ArrayList&lt;&gt;(state));   <span class="tok-com">// snapshot!</span>
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-kw">for</span> (choice : choices) {
+        <span class="tok-kw">if</span> (!isValid(choice, state)) <span class="tok-kw">continue</span>;
+        state.add(choice);                <span class="tok-com">// make choice</span>
+        backtrack(state, choices);        <span class="tok-com">// explore</span>
+        state.remove(state.size() - <span class="tok-num">1</span>);   <span class="tok-com">// UNDO</span>
+    }
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Example — generate all subsets</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="tok-fn">subsets</span>(<span class="tok-typ">int</span>[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; res = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+    backtrack(<span class="tok-num">0</span>, nums, <span class="tok-kw">new</span> ArrayList&lt;&gt;(), res);
+    <span class="tok-kw">return</span> res;
+}
+
+<span class="tok-kw">private</span> <span class="tok-kw">void</span> <span class="tok-fn">backtrack</span>(<span class="tok-typ">int</span> start, <span class="tok-typ">int</span>[] nums,
+                       List&lt;Integer&gt; cur, List&lt;List&lt;Integer&gt;&gt; res) {
+    res.add(<span class="tok-kw">new</span> ArrayList&lt;&gt;(cur));        <span class="tok-com">// every state is an answer</span>
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = start; i &lt; nums.length; i++) {
+        cur.add(nums[i]);                    <span class="tok-com">// choose</span>
+        backtrack(i + <span class="tok-num">1</span>, nums, cur, res);     <span class="tok-com">// explore</span>
+        cur.remove(cur.size() - <span class="tok-num">1</span>);          <span class="tok-com">// un-choose</span>
+    }
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Always add a copy</div>
+    Notice <code class="inline">new ArrayList&lt;&gt;(cur)</code>. If you add <code class="inline">cur</code> directly, every entry in <code class="inline">res</code> would be the same reference that keeps getting mutated. You'd end up with a list of empty lists. Always snapshot.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/subsets/" target="_blank" rel="noopener"><span class="pc-num">№ 78</span><span class="pc-title">Subsets</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/permutations/" target="_blank" rel="noopener"><span class="pc-num">№ 46</span><span class="pc-title">Permutations</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/combinations/" target="_blank" rel="noopener"><span class="pc-num">№ 77</span><span class="pc-title">Combinations</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/combination-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 39</span><span class="pc-title">Combination Sum</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/word-search/" target="_blank" rel="noopener"><span class="pc-num">№ 79</span><span class="pc-title">Word Search</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/letter-combinations-of-a-phone-number/" target="_blank" rel="noopener"><span class="pc-num">№ 17</span><span class="pc-title">Letter Combinations of Phone</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/n-queens/" target="_blank" rel="noopener"><span class="pc-num">№ 51</span><span class="pc-title">N-Queens</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/sudoku-solver/" target="_blank" rel="noopener"><span class="pc-num">№ 37</span><span class="pc-title">Sudoku Solver</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BFS ============ -->
+<section class="topic" id="bfs">
+  <div class="section-number">§ 8 · BFS</div>
+  <h2 class="topic-title">Breadth-First Search</h2>
+  <p class="dropcap">BFS explores a graph or tree <em>level by level</em>, like ripples spreading from a pebble. Because it reaches everything one step away before going two steps, BFS is the natural choice for <strong>shortest path in an unweighted graph</strong> and for any "minimum number of moves" question.</p>
+
+  <div class="analogy">
+    Picture a rumour spreading through a school. At minute 1, only your best friend knows. At minute 2, your friend's friends know. At minute 3, their friends know. Whoever you ask "how did you hear?", the chain of telling is the shortest one. BFS computes exactly that—the fewest hops from the source.
+  </div>
+
+  <h3 class="subhead">When to recognise it</h3>
+  <ul class="list">
+    <li>"Shortest path / fewest moves / minimum steps" in an unweighted graph.</li>
+    <li>"Level-order" traversal of a tree.</li>
+    <li>Grid problems where each cell connects to its 4 neighbours.</li>
+    <li>Multi-source spreading (rotting oranges, walls and gates).</li>
+  </ul>
+
+  <h3 class="subhead">Template — grid BFS</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span>[][] DIRS = {{-<span class="tok-num">1</span>,<span class="tok-num">0</span>}, {<span class="tok-num">1</span>,<span class="tok-num">0</span>}, {<span class="tok-num">0</span>,-<span class="tok-num">1</span>}, {<span class="tok-num">0</span>,<span class="tok-num">1</span>}};
+
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">shortestPath</span>(<span class="tok-typ">int</span>[][] grid, <span class="tok-typ">int</span>[] start, <span class="tok-typ">int</span>[] end) {
+    <span class="tok-typ">int</span> R = grid.length, C = grid[<span class="tok-num">0</span>].length;
+    <span class="tok-kw">boolean</span>[][] seen = <span class="tok-kw">new</span> <span class="tok-kw">boolean</span>[R][C];
+    Queue&lt;<span class="tok-typ">int</span>[]&gt; q = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+    q.offer(<span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{start[<span class="tok-num">0</span>], start[<span class="tok-num">1</span>]});
+    seen[start[<span class="tok-num">0</span>]][start[<span class="tok-num">1</span>]] = <span class="tok-kw">true</span>;
+    <span class="tok-typ">int</span> steps = <span class="tok-num">0</span>;
+
+    <span class="tok-kw">while</span> (!q.isEmpty()) {
+        <span class="tok-typ">int</span> sz = q.size();
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; sz; i++) {
+            <span class="tok-typ">int</span>[] cur = q.poll();
+            <span class="tok-kw">if</span> (cur[<span class="tok-num">0</span>] == end[<span class="tok-num">0</span>] &amp;&amp; cur[<span class="tok-num">1</span>] == end[<span class="tok-num">1</span>])
+                <span class="tok-kw">return</span> steps;
+            <span class="tok-kw">for</span> (<span class="tok-typ">int</span>[] d : DIRS) {
+                <span class="tok-typ">int</span> r = cur[<span class="tok-num">0</span>] + d[<span class="tok-num">0</span>], c = cur[<span class="tok-num">1</span>] + d[<span class="tok-num">1</span>];
+                <span class="tok-kw">if</span> (r &lt; <span class="tok-num">0</span> || r &gt;= R || c &lt; <span class="tok-num">0</span> || c &gt;= C) <span class="tok-kw">continue</span>;
+                <span class="tok-kw">if</span> (seen[r][c] || grid[r][c] == <span class="tok-num">1</span>) <span class="tok-kw">continue</span>;
+                seen[r][c] = <span class="tok-kw">true</span>;
+                q.offer(<span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{r, c});
+            }
+        }
+        steps++;
+    }
+    <span class="tok-kw">return</span> -<span class="tok-num">1</span>;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener"><span class="pc-num">№ 102</span><span class="pc-title">Level Order Traversal</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/rotting-oranges/" target="_blank" rel="noopener"><span class="pc-num">№ 994</span><span class="pc-title">Rotting Oranges</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/01-matrix/" target="_blank" rel="noopener"><span class="pc-num">№ 542</span><span class="pc-title">01 Matrix</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/shortest-path-in-binary-matrix/" target="_blank" rel="noopener"><span class="pc-num">№ 1091</span><span class="pc-title">Shortest Path in Binary Matrix</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/walls-and-gates/" target="_blank" rel="noopener"><span class="pc-num">№ 286</span><span class="pc-title">Walls and Gates</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="noopener"><span class="pc-num">№ 127</span><span class="pc-title">Word Ladder</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DFS ============ -->
+<section class="topic" id="dfs">
+  <div class="section-number">§ 9 · DFS</div>
+  <h2 class="topic-title">Depth-First Search</h2>
+  <p class="dropcap">DFS dives as deep as possible before backing up. If BFS is ripples spreading evenly, DFS is a single explorer plunging into one branch until it hits a wall, then backing up to try the next branch. It's the workhorse of tree problems, connectivity questions, and path-finding when you just need <em>any</em> path, not the shortest.</p>
+
+  <div class="analogy">
+    Picture exploring a museum with a rule: at every fork, always take the leftmost unvisited door. You'll go deep into one wing, hit dead ends, back out, take the next door, repeat. Eventually you've seen every room. That single-minded plunge-and-backtrack is DFS.
+  </div>
+
+  <h3 class="subhead">Recursive template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">void</span> <span class="tok-fn">dfs</span>(<span class="tok-typ">int</span> node, List&lt;List&lt;Integer&gt;&gt; graph, <span class="tok-kw">boolean</span>[] seen) {
+    <span class="tok-kw">if</span> (seen[node]) <span class="tok-kw">return</span>;
+    seen[node] = <span class="tok-kw">true</span>;
+    <span class="tok-com">// process node</span>
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> nb : graph.get(node)) dfs(nb, graph, seen);
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Iterative template (with a stack)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">void</span> <span class="tok-fn">dfsIter</span>(<span class="tok-typ">int</span> start, List&lt;List&lt;Integer&gt;&gt; graph) {
+    Deque&lt;Integer&gt; stack = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+    <span class="tok-kw">boolean</span>[] seen = <span class="tok-kw">new</span> <span class="tok-kw">boolean</span>[graph.size()];
+    stack.push(start);
+    <span class="tok-kw">while</span> (!stack.isEmpty()) {
+        <span class="tok-typ">int</span> node = stack.pop();
+        <span class="tok-kw">if</span> (seen[node]) <span class="tok-kw">continue</span>;
+        seen[node] = <span class="tok-kw">true</span>;
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> nb : graph.get(node))
+            <span class="tok-kw">if</span> (!seen[nb]) stack.push(nb);
+    }
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">BFS or DFS?</div>
+    Need the <em>shortest</em> path / fewest moves → BFS. Need to <em>enumerate</em> paths, detect cycles, count connected components, or do anything with backtracking → DFS. When both work, DFS is usually shorter to write because recursion handles the stack for you.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/number-of-islands/" target="_blank" rel="noopener"><span class="pc-num">№ 200</span><span class="pc-title">Number of Islands</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/max-area-of-island/" target="_blank" rel="noopener"><span class="pc-num">№ 695</span><span class="pc-title">Max Area of Island</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/flood-fill/" target="_blank" rel="noopener"><span class="pc-num">№ 733</span><span class="pc-title">Flood Fill</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/clone-graph/" target="_blank" rel="noopener"><span class="pc-num">№ 133</span><span class="pc-title">Clone Graph</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/path-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 112</span><span class="pc-title">Path Sum</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/surrounded-regions/" target="_blank" rel="noopener"><span class="pc-num">№ 130</span><span class="pc-title">Surrounded Regions</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOPOLOGICAL SORT ============ -->
+<section class="topic" id="topo">
+  <div class="section-number">§ 10 · Topological Sort</div>
+  <h2 class="topic-title">Topological Sort</h2>
+  <p class="dropcap">Imagine you're scheduling university courses where some have prerequisites. CS201 requires CS101. CS301 requires CS201. A topological sort gives you a valid order to take everything—an order that never breaks a dependency. It only works on <strong>directed acyclic graphs (DAGs)</strong>; if there's a cycle, no valid order exists.</p>
+
+  <div class="analogy">
+    Topo sort is the order you'd put on clothes. Socks before shoes. Shirt before jacket. Many valid orders exist—socks-shirt-shoes-jacket or shirt-socks-jacket-shoes—but you can never wear shoes before socks. Toposort produces <em>any</em> order that respects every "before" constraint.
+  </div>
+
+  <h3 class="subhead">Kahn's algorithm — BFS with in-degree counts</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span>[] <span class="tok-fn">topoSort</span>(<span class="tok-typ">int</span> n, <span class="tok-typ">int</span>[][] prereqs) {
+    List&lt;List&lt;Integer&gt;&gt; graph = <span class="tok-kw">new</span> ArrayList&lt;&gt;();
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++) graph.add(<span class="tok-kw">new</span> ArrayList&lt;&gt;());
+    <span class="tok-typ">int</span>[] inDeg = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span>[] p : prereqs) {
+        graph.get(p[<span class="tok-num">1</span>]).add(p[<span class="tok-num">0</span>]);   <span class="tok-com">// p[1] → p[0]</span>
+        inDeg[p[<span class="tok-num">0</span>]]++;
+    }
+
+    Queue&lt;Integer&gt; q = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++)
+        <span class="tok-kw">if</span> (inDeg[i] == <span class="tok-num">0</span>) q.offer(i);
+
+    <span class="tok-typ">int</span>[] order = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+    <span class="tok-typ">int</span> idx = <span class="tok-num">0</span>;
+    <span class="tok-kw">while</span> (!q.isEmpty()) {
+        <span class="tok-typ">int</span> node = q.poll();
+        order[idx++] = node;
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> nb : graph.get(node))
+            <span class="tok-kw">if</span> (--inDeg[nb] == <span class="tok-num">0</span>) q.offer(nb);
+    }
+    <span class="tok-kw">return</span> idx == n ? order : <span class="tok-kw">new</span> <span class="tok-typ">int</span>[<span class="tok-num">0</span>];  <span class="tok-com">// empty = cycle</span>
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/course-schedule/" target="_blank" rel="noopener"><span class="pc-num">№ 207</span><span class="pc-title">Course Schedule</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/course-schedule-ii/" target="_blank" rel="noopener"><span class="pc-num">№ 210</span><span class="pc-title">Course Schedule II</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/alien-dictionary/" target="_blank" rel="noopener"><span class="pc-num">№ 269</span><span class="pc-title">Alien Dictionary</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/minimum-height-trees/" target="_blank" rel="noopener"><span class="pc-num">№ 310</span><span class="pc-title">Minimum Height Trees</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIJKSTRA ============ -->
+<section class="topic" id="dijkstra">
+  <div class="section-number">§ 11 · Dijkstra's Algorithm</div>
+  <h2 class="topic-title">Dijkstra — Weighted Shortest Path</h2>
+  <p class="dropcap">BFS finds the shortest path when every edge costs 1. The moment edges have different weights—roads with tolls, flights with fares, networks with latencies—BFS breaks. Dijkstra's algorithm fixes this by always expanding the cheapest-so-far node next, using a min-heap. It's BFS with a priority queue. <strong>Caveat:</strong> all edge weights must be non-negative.</p>
+
+  <div class="analogy">
+    A waterfall flooding a landscape. Water always fills the lowest unfilled point first—not by order of discovery, but by elevation. Dijkstra is exactly that: at each step, expand the node with the smallest total distance found so far. The first time we settle a node, that distance is optimal.
+  </div>
+
+  <h3 class="subhead">Java template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span>[] <span class="tok-fn">dijkstra</span>(<span class="tok-typ">int</span> n, List&lt;<span class="tok-typ">int</span>[]&gt;[] graph, <span class="tok-typ">int</span> src) {
+    <span class="tok-com">// graph[u] contains {v, weight} pairs</span>
+    <span class="tok-typ">int</span>[] dist = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = <span class="tok-num">0</span>;
+
+    PriorityQueue&lt;<span class="tok-typ">int</span>[]&gt; pq = <span class="tok-kw">new</span> PriorityQueue&lt;&gt;((a, b) -&gt; a[<span class="tok-num">1</span>] - b[<span class="tok-num">1</span>]);
+    pq.offer(<span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{src, <span class="tok-num">0</span>});
+
+    <span class="tok-kw">while</span> (!pq.isEmpty()) {
+        <span class="tok-typ">int</span>[] cur = pq.poll();
+        <span class="tok-typ">int</span> u = cur[<span class="tok-num">0</span>], d = cur[<span class="tok-num">1</span>];
+        <span class="tok-kw">if</span> (d &gt; dist[u]) <span class="tok-kw">continue</span>;    <span class="tok-com">// stale entry</span>
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span>[] edge : graph[u]) {
+            <span class="tok-typ">int</span> v = edge[<span class="tok-num">0</span>], w = edge[<span class="tok-num">1</span>];
+            <span class="tok-kw">if</span> (d + w &lt; dist[v]) {
+                dist[v] = d + w;
+                pq.offer(<span class="tok-kw">new</span> <span class="tok-typ">int</span>[]{v, dist[v]});
+            }
+        }
+    }
+    <span class="tok-kw">return</span> dist;
+}</code></pre>
+  </div>
+
+  <p>Complexity: <code class="inline">O((V + E) log V)</code> with a binary heap—fast enough for almost everything.</p>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/network-delay-time/" target="_blank" rel="noopener"><span class="pc-num">№ 743</span><span class="pc-title">Network Delay Time</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/cheapest-flights-within-k-stops/" target="_blank" rel="noopener"><span class="pc-num">№ 787</span><span class="pc-title">Cheapest Flights Within K Stops</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/path-with-minimum-effort/" target="_blank" rel="noopener"><span class="pc-num">№ 1631</span><span class="pc-title">Path With Minimum Effort</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/swim-in-rising-water/" target="_blank" rel="noopener"><span class="pc-num">№ 778</span><span class="pc-title">Swim in Rising Water</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GREEDY ============ -->
+<section class="topic" id="greedy">
+  <div class="section-number">§ 12 · Greedy</div>
+  <h2 class="topic-title">Greedy</h2>
+  <p class="dropcap">A greedy algorithm makes the locally best choice at every step and hopes it adds up to the globally best answer. Often it does. Often it doesn't. The art is knowing when. Greedy is fast when it works—usually O(n log n) including the sort—but proving it's correct on a given problem is the actual challenge.</p>
+
+  <div class="analogy">
+    Imagine paying ₹87 with the fewest coins. With Indian coins {₹1, ₹2, ₹5, ₹10}, greedy works: take as many ₹10s as fit, then ₹5s, then ₹2s, then ₹1s. But on a weird currency like {₹1, ₹3, ₹4}, greedy fails — for ₹6 it grabs ₹4 + ₹1 + ₹1 (three coins), missing the better answer ₹3 + ₹3 (two coins). Greedy is only as good as the problem allows.
+  </div>
+
+  <h3 class="subhead">Telltale signs greedy might work</h3>
+  <ul class="list">
+    <li>Sorting unlocks structure — sort by deadline, by start time, by ratio.</li>
+    <li>"Pick maximum number of X" or "minimum cost to do Y."</li>
+    <li>Interval problems — selecting / merging / scheduling.</li>
+    <li>You can argue an exchange: swapping a non-greedy choice for the greedy one never makes things worse.</li>
+  </ul>
+
+  <h3 class="subhead">Classic example — interval scheduling</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// Maximum non-overlapping meetings — sort by END time, pick earliest-ending</span>
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">maxMeetings</span>(<span class="tok-typ">int</span>[][] meetings) {
+    Arrays.sort(meetings, (a, b) -&gt; a[<span class="tok-num">1</span>] - b[<span class="tok-num">1</span>]);
+    <span class="tok-typ">int</span> count = <span class="tok-num">0</span>, lastEnd = Integer.MIN_VALUE;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span>[] m : meetings) {
+        <span class="tok-kw">if</span> (m[<span class="tok-num">0</span>] &gt;= lastEnd) {
+            count++;
+            lastEnd = m[<span class="tok-num">1</span>];
+        }
+    }
+    <span class="tok-kw">return</span> count;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/jump-game/" target="_blank" rel="noopener"><span class="pc-num">№ 55</span><span class="pc-title">Jump Game</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/jump-game-ii/" target="_blank" rel="noopener"><span class="pc-num">№ 45</span><span class="pc-title">Jump Game II</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/gas-station/" target="_blank" rel="noopener"><span class="pc-num">№ 134</span><span class="pc-title">Gas Station</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/non-overlapping-intervals/" target="_blank" rel="noopener"><span class="pc-num">№ 435</span><span class="pc-title">Non-overlapping Intervals</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/partition-labels/" target="_blank" rel="noopener"><span class="pc-num">№ 763</span><span class="pc-title">Partition Labels</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/" target="_blank" rel="noopener"><span class="pc-num">№ 452</span><span class="pc-title">Minimum Arrows</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DP ============ -->
+<section class="topic" id="dp">
+  <div class="section-number">§ 13 · Dynamic Programming</div>
+  <h2 class="topic-title">Dynamic Programming</h2>
+  <p class="dropcap">Dynamic programming is recursion that remembers. The same subproblem comes up again and again; instead of resolving it, you cache the answer the first time and reuse it. That's the whole idea. The hard part isn't coding—it's defining the right "state" so that the answer for state S can be built from the answers of smaller states.</p>
+
+  <div class="analogy">
+    Imagine climbing stairs where each step you can take 1 or 2 stairs. How many ways to reach step N? You realise the number of ways to reach step N is just (ways to reach N-1) + (ways to reach N-2)—because you got there either by a 1-step or a 2-step. Once you compute "ways(5)" once, you'd be foolish to compute it again. Write it down. Reuse it. That's DP.
+  </div>
+
+  <h3 class="subhead">The DP method — three steps</h3>
+  <ol class="list">
+    <li><strong>Define the state.</strong> What does <code class="inline">dp[i]</code> (or <code class="inline">dp[i][j]</code>) <em>mean</em>? Write it out as an English sentence: "the maximum sum of a subarray ending at index i."</li>
+    <li><strong>Write the recurrence.</strong> How does the answer for state S build from smaller states?</li>
+    <li><strong>Identify base cases.</strong> The smallest states where the answer is direct.</li>
+  </ol>
+
+  <h3 class="subhead">Top-down (memoization)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-typ">int</span>[] memo;
+
+<span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">climbStairs</span>(<span class="tok-typ">int</span> n) {
+    memo = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n + <span class="tok-num">1</span>];
+    <span class="tok-kw">return</span> solve(n);
+}
+<span class="tok-kw">private</span> <span class="tok-typ">int</span> <span class="tok-fn">solve</span>(<span class="tok-typ">int</span> n) {
+    <span class="tok-kw">if</span> (n &lt;= <span class="tok-num">2</span>) <span class="tok-kw">return</span> n;
+    <span class="tok-kw">if</span> (memo[n] != <span class="tok-num">0</span>) <span class="tok-kw">return</span> memo[n];
+    <span class="tok-kw">return</span> memo[n] = solve(n - <span class="tok-num">1</span>) + solve(n - <span class="tok-num">2</span>);
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">Bottom-up (tabulation)</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">climbStairs</span>(<span class="tok-typ">int</span> n) {
+    <span class="tok-kw">if</span> (n &lt;= <span class="tok-num">2</span>) <span class="tok-kw">return</span> n;
+    <span class="tok-typ">int</span>[] dp = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n + <span class="tok-num">1</span>];
+    dp[<span class="tok-num">1</span>] = <span class="tok-num">1</span>; dp[<span class="tok-num">2</span>] = <span class="tok-num">2</span>;
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">3</span>; i &lt;= n; i++)
+        dp[i] = dp[i - <span class="tok-num">1</span>] + dp[i - <span class="tok-num">2</span>];
+    <span class="tok-kw">return</span> dp[n];
+}</code></pre>
+  </div>
+
+  <h3 class="subhead">The DP family — patterns you'll see again and again</h3>
+  <ul class="list">
+    <li><strong>1D DP</strong> — Climbing Stairs, House Robber, Max Subarray (Kadane).</li>
+    <li><strong>0/1 Knapsack</strong> — Pick or skip each item. Subset Sum, Partition Equal Subset.</li>
+    <li><strong>Unbounded Knapsack</strong> — Use each item infinite times. Coin Change.</li>
+    <li><strong>Longest Increasing Subsequence (LIS)</strong> — O(n²) DP or O(n log n) patience-sort.</li>
+    <li><strong>Longest Common Subsequence (LCS)</strong> — 2D DP on two strings.</li>
+    <li><strong>Edit Distance</strong> — 2D DP, the canonical string-comparison problem.</li>
+    <li><strong>Matrix DP</strong> — Unique Paths, Min Path Sum on a grid.</li>
+    <li><strong>Interval DP</strong> — Burst Balloons, Matrix Chain Multiplication.</li>
+  </ul>
+
+  <h3 class="subhead">Example — 0/1 Knapsack template</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span> <span class="tok-fn">knapsack</span>(<span class="tok-typ">int</span>[] wt, <span class="tok-typ">int</span>[] val, <span class="tok-typ">int</span> cap) {
+    <span class="tok-typ">int</span> n = wt.length;
+    <span class="tok-typ">int</span>[][] dp = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n + <span class="tok-num">1</span>][cap + <span class="tok-num">1</span>];
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">1</span>; i &lt;= n; i++) {
+        <span class="tok-kw">for</span> (<span class="tok-typ">int</span> w = <span class="tok-num">0</span>; w &lt;= cap; w++) {
+            dp[i][w] = dp[i - <span class="tok-num">1</span>][w];                       <span class="tok-com">// skip item</span>
+            <span class="tok-kw">if</span> (w &gt;= wt[i - <span class="tok-num">1</span>])
+                dp[i][w] = Math.max(dp[i][w],
+                          dp[i - <span class="tok-num">1</span>][w - wt[i - <span class="tok-num">1</span>]] + val[i - <span class="tok-num">1</span>]);
+        }
+    }
+    <span class="tok-kw">return</span> dp[n][cap];
+}</code></pre>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">How to start a DP problem</div>
+    Always begin with the recursive solution. Forget optimization. Write the brute recursion that just <em>tries every option</em>. Once it works on small inputs, look at the parameters of the recursive function — those are your DP state. Add memoization with a HashMap or 2D array, and you're done. Bottom-up is just a polish step.
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/climbing-stairs/" target="_blank" rel="noopener"><span class="pc-num">№ 70</span><span class="pc-title">Climbing Stairs</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/house-robber/" target="_blank" rel="noopener"><span class="pc-num">№ 198</span><span class="pc-title">House Robber</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/coin-change/" target="_blank" rel="noopener"><span class="pc-num">№ 322</span><span class="pc-title">Coin Change</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank" rel="noopener"><span class="pc-num">№ 300</span><span class="pc-title">Longest Increasing Subsequence</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/word-break/" target="_blank" rel="noopener"><span class="pc-num">№ 139</span><span class="pc-title">Word Break</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/partition-equal-subset-sum/" target="_blank" rel="noopener"><span class="pc-num">№ 416</span><span class="pc-title">Partition Equal Subset Sum</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/longest-common-subsequence/" target="_blank" rel="noopener"><span class="pc-num">№ 1143</span><span class="pc-title">Longest Common Subsequence</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/unique-paths/" target="_blank" rel="noopener"><span class="pc-num">№ 62</span><span class="pc-title">Unique Paths</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/edit-distance/" target="_blank" rel="noopener"><span class="pc-num">№ 72</span><span class="pc-title">Edit Distance</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="noopener"><span class="pc-num">№ 10</span><span class="pc-title">Regular Expression Matching</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BIT MANIPULATION ============ -->
+<section class="topic" id="bits">
+  <div class="section-number">§ 14 · Bit Manipulation</div>
+  <h2 class="topic-title">Bit Manipulation</h2>
+  <p class="dropcap">Every integer is just a string of 0s and 1s. Bit manipulation works at that level directly—setting, clearing, flipping, or counting individual bits. The payoff: operations that would take a loop in normal code become single instructions. Used cleverly, they replace HashSets with a single integer.</p>
+
+  <div class="analogy">
+    Imagine 32 light switches in a row. You can turn any one on or off, ask "is switch 7 on?", flip them all at once. That's bit manipulation: each switch is a bit, and clever combinations of AND, OR, XOR, and shifts let you query and modify the whole row in one operation.
+  </div>
+
+  <h3 class="subhead">The operations to memorise</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-com">// AND  &amp;     OR  |     XOR  ^     NOT  ~     Left  &lt;&lt;     Right  &gt;&gt;</span>
+
+<span class="tok-typ">int</span> n = <span class="tok-num">12</span>;        <span class="tok-com">// binary: 1100</span>
+
+n &amp; <span class="tok-num">1</span>;             <span class="tok-com">// 0 — is last bit set?</span>
+n | (<span class="tok-num">1</span> &lt;&lt; <span class="tok-num">3</span>);      <span class="tok-com">// set bit 3</span>
+n &amp; ~(<span class="tok-num">1</span> &lt;&lt; <span class="tok-num">2</span>);     <span class="tok-com">// clear bit 2</span>
+n ^ (<span class="tok-num">1</span> &lt;&lt; <span class="tok-num">2</span>);      <span class="tok-com">// flip bit 2</span>
+(n &gt;&gt; k) &amp; <span class="tok-num">1</span>;       <span class="tok-com">// get value of bit k (0 or 1)</span>
+
+<span class="tok-com">// XOR magic: x ^ x == 0  and  x ^ 0 == x</span>
+<span class="tok-com">// → find the unique number in {a, a, b, b, c, c, d} : XOR them all</span>
+
+<span class="tok-com">// Useful built-ins</span>
+Integer.bitCount(n);            <span class="tok-com">// number of 1-bits</span>
+Integer.toBinaryString(n);
+Integer.numberOfTrailingZeros(n);
+
+<span class="tok-com">// n &amp; (n - 1) clears the LOWEST set bit — count bits in O(set-bits)</span>
+<span class="tok-kw">while</span> (n != <span class="tok-num">0</span>) {
+    n &amp;= (n - <span class="tok-num">1</span>);
+    count++;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/single-number/" target="_blank" rel="noopener"><span class="pc-num">№ 136</span><span class="pc-title">Single Number</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="noopener"><span class="pc-num">№ 191</span><span class="pc-title">Number of 1 Bits</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/counting-bits/" target="_blank" rel="noopener"><span class="pc-num">№ 338</span><span class="pc-title">Counting Bits</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/reverse-bits/" target="_blank" rel="noopener"><span class="pc-num">№ 190</span><span class="pc-title">Reverse Bits</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/missing-number/" target="_blank" rel="noopener"><span class="pc-num">№ 268</span><span class="pc-title">Missing Number</span><span class="pc-diff easy">Easy</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/sum-of-two-integers/" target="_blank" rel="noopener"><span class="pc-num">№ 371</span><span class="pc-title">Sum of Two Integers</span><span class="pc-diff medium">Medium</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MONOTONIC STACK ============ -->
+<section class="topic" id="monotonic">
+  <div class="section-number">§ 15 · Monotonic Stack</div>
+  <h2 class="topic-title">Monotonic Stack</h2>
+  <p class="dropcap">A monotonic stack is a stack where you maintain an invariant: elements inside it stay in increasing (or decreasing) order. Whenever pushing a new element would break the order, you pop the offending elements first. Sounds niche, but it's the secret to "next greater element," "largest rectangle in histogram," and "daily temperatures" problems—all in O(n).</p>
+
+  <div class="analogy">
+    Think of stacking books from tallest to shortest. When a new book is taller than the one on top, the top book has to come off — and since the original stack was ordered, every book about to be popped <em>knows</em> its "next taller neighbour" is the new book. That's the magic: as elements get popped, you learn their answer.
+  </div>
+
+  <h3 class="subhead">Template — next greater element</h3>
+  <div class="code-block" data-lang="java">
+<pre><code><span class="tok-kw">public</span> <span class="tok-typ">int</span>[] <span class="tok-fn">nextGreater</span>(<span class="tok-typ">int</span>[] nums) {
+    <span class="tok-typ">int</span> n = nums.length;
+    <span class="tok-typ">int</span>[] res = <span class="tok-kw">new</span> <span class="tok-typ">int</span>[n];
+    Arrays.fill(res, -<span class="tok-num">1</span>);
+    Deque&lt;Integer&gt; stack = <span class="tok-kw">new</span> ArrayDeque&lt;&gt;();   <span class="tok-com">// indices</span>
+    <span class="tok-kw">for</span> (<span class="tok-typ">int</span> i = <span class="tok-num">0</span>; i &lt; n; i++) {
+        <span class="tok-kw">while</span> (!stack.isEmpty() &amp;&amp; nums[stack.peek()] &lt; nums[i]) {
+            res[stack.pop()] = nums[i];
+        }
+        stack.push(i);
+    }
+    <span class="tok-kw">return</span> res;
+}</code></pre>
+  </div>
+
+  <div class="problems">
+    <div class="problems-title">Practice</div>
+    <div class="problem-grid">
+      <a class="problem-card" href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener"><span class="pc-num">№ 739</span><span class="pc-title">Daily Temperatures</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/next-greater-element-ii/" target="_blank" rel="noopener"><span class="pc-num">№ 503</span><span class="pc-title">Next Greater Element II</span><span class="pc-diff medium">Medium</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener"><span class="pc-num">№ 84</span><span class="pc-title">Largest Rectangle in Histogram</span><span class="pc-diff hard">Hard</span></a>
+      <a class="problem-card" href="https://leetcode.com/problems/maximal-rectangle/" target="_blank" rel="noopener"><span class="pc-num">№ 85</span><span class="pc-title">Maximal Rectangle</span><span class="pc-diff hard">Hard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLAYBOOK ============ -->
+<section class="topic" id="playbook">
+  <div class="section-number">§ 16 · The Recognition Playbook</div>
+  <h2 class="topic-title">The recognition playbook</h2>
+  <p>When a new problem arrives, walk this checklist. The first match is usually the right pattern.</p>
+
+  <table class="complexity">
+    <thead><tr><th>If the problem mentions…</th><th>Reach for…</th></tr></thead>
+    <tbody>
+      <tr><td>Sorted array, target sum, pair / triplet</td><td>Two Pointers</td></tr>
+      <tr><td>Contiguous subarray / substring, "longest / smallest"</td><td>Sliding Window</td></tr>
+      <tr><td>Many range-sum queries on a static array</td><td>Prefix Sum</td></tr>
+      <tr><td>Sorted input, or "find / search / minimum X such that…"</td><td>Binary Search (sometimes "on the answer")</td></tr>
+      <tr><td>"All permutations / subsets / combinations / ways"</td><td>Backtracking</td></tr>
+      <tr><td>"Top K" / "Kth smallest / largest"</td><td>Heap (PriorityQueue)</td></tr>
+      <tr><td>Tree problem, anything</td><td>Recursion (DFS), sometimes BFS for levels</td></tr>
+      <tr><td>Shortest path in unweighted graph / grid</td><td>BFS</td></tr>
+      <tr><td>Shortest path with non-negative weights</td><td>Dijkstra</td></tr>
+      <tr><td>Connected components / "are X and Y connected?"</td><td>Union-Find or DFS</td></tr>
+      <tr><td>Dependencies / ordering / prerequisites</td><td>Topological Sort</td></tr>
+      <tr><td>"Count / minimum / maximum number of ways"</td><td>Dynamic Programming</td></tr>
+      <tr><td>Two strings → compare / transform / match</td><td>2D DP (LCS, Edit Distance pattern)</td></tr>
+      <tr><td>Pick items with constraints</td><td>Knapsack DP</td></tr>
+      <tr><td>"Next greater / smaller element"</td><td>Monotonic Stack</td></tr>
+      <tr><td>Prefix matching / autocomplete</td><td>Trie</td></tr>
+      <tr><td>"Find unique number" with bit-pair-up tricks</td><td>XOR / Bit Manipulation</td></tr>
+      <tr><td>Locally-best choice each step works out</td><td>Greedy (always verify with a test case)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ornament">❦</div>
+  <p style="font-size:1.1rem;font-family:'Fraunces',serif;font-style:italic;color:var(--ink-soft);text-align:center;margin-top:2rem;">
+    Patterns in hand. Now sharpen the language you'll write them in.
+  </p>
+  <p style="text-align:center;margin-top:1.5rem;">
+    <a href="java.html" class="path-cta" style="text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px;">Open the Java Toolkit</a>
+  </p>
+</section>
+
+</article>
+</div>
+
+<footer>
+  The DSA Codex · Chapter III · <em>recognise the pattern, write the solution</em>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
